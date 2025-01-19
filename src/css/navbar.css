@@ -1,0 +1,125 @@
+/* Updated heroSection.css */
+
+/* Hero Section Wrapper */
+.hero-section {
+  position: relative;
+  background-color: #fff6f2;
+  padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Container Styling */
+.hero-container {
+  /* display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 1rem; */
+  width: 1920px;
+  height: 765px;
+}
+
+/* Image Section */
+.hero-image {
+    width: 700px;
+    height: 658px;
+    background: url("/public/img/banner2.jpg") lightgray 50% / cover no-repeat;
+    background-size: cover;
+}
+
+.hero-image-content {
+  width: 1030px;
+  height: 648px;
+  flex-shrink: 0;
+  margin-bottom: 55px;
+}
+
+/* Text Section */
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+  padding: 1rem 2rem;
+  text-align: left;
+}
+
+.hero-subtitle {
+  font-size: 0.8rem;
+  color: #d47b62;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.highlight {
+  color: #d47b62;
+  text-decoration: underline;
+  text-decoration-color: #d47b62;
+}
+
+.hero-description {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.hero-button {
+  background-color: #333;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 25px;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #555;
+}
+
+/* Product Preview Card */
+.product-preview-card {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+}
+
+.product-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.product-title {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: bold;
+  flex: 1;
+}
+
+.product-price {
+  font-size: 0.8rem;
+  color: #666;
+}
