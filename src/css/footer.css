@@ -8,10 +8,10 @@
 }
 
 .logo {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-  }
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
 
 .sns-context {
   width: 148px;
@@ -31,26 +31,26 @@
 }
 
 .foot-category-link {
-    flex-direction: column;
+  flex-direction: column;
   color: var(--Black, #394149);
   font-family: Rubik;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 29px; /* 181.25% */
-  gap: 20px
+  gap: 20px;
 }
 
 .foot-category-link a {
-    width: 97px;
-height: 24px;
-flex-shrink: 0;
-    color: var(--Black, #394149);
-    font-family: Rubik;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 27px; /* 168.75% */
+  width: 97px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--Black, #394149);
+  font-family: Rubik;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px; /* 168.75% */
 }
 
 .find-us {
@@ -77,12 +77,12 @@ flex-shrink: 0;
 }
 
 .copyright-txt {
-    color: var(--Black, #394149);
-    font-family: Rubik;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 29px; /* 161.111% */
+  color: var(--Black, #394149);
+  font-family: Rubik;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 29px; /* 161.111% */
 }
 
 .foot-category-title:after {

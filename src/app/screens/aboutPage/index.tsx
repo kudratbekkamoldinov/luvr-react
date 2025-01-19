@@ -1,3 +1,5 @@
+import { Container } from "@mui/material";
+
 export function AboutPage() {
-    return <div>About</div>;
+    return <Container>About</Container>;
 }

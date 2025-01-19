@@ -75,12 +75,14 @@
   display: flex;
   align-items: center;
   gap: 30px;
+  margin-right: 198px;
 }
 
 .top-navbar .top-navbar-container .nav-icons .icon {
   width: 22px;
   height: 22.021px;
   flex-shrink: 0;
+  
 }
 
 .top-navbar .top-navbar-container .nav-icons .badge {
@@ -90,7 +92,7 @@
 }
 
 .top-navbar .top-navbar-container .profile-button {
-  margin-right: 198px;
+  
   width: 22px;
   height: 22.021px;
   flex-shrink: 0;
