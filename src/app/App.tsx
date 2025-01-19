@@ -1,47 +1,26 @@
-import { Route } from "react-router-dom";
-import { Switch } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { ProductsPage } from "./screens/productsPage";
-import { UserPage } from "./screens/userPage";
+import { Routes, Route } from "react-router-dom";
+import { HomeNavbar } from "./components/headers/HomeNavbar";
 import { HomePage } from "./screens/homePage";
+import { ProductsPage } from "./screens/productsPage";
 import { OrdersPage } from "./screens/ordersPage";
+import { AboutPage } from "./screens/aboutPage";
+import { UserPage } from "./screens/userPage";
+import { Footer } from "./components/footer";
 
-function App() {
+
+export default function App() {
+  const  authMember  = true;
   return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">HomePage</Link>
-          </li>
-          <li>
-            <Link to="/products">ProductsPage</Link>
-          </li>
-          <li>
-            <Link to="/orders">OrdersPage</Link>
-          </li>
-          <li>
-            <Link to="/member-page">UserPage</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <Switch>
-        <Route path="/products">
-          <ProductsPage />
-        </Route>
-        <Route path="/orders">
-          <OrdersPage />
-        </Route>
-        <Route path="/member-page">
-          <UserPage />
-        </Route>
-        <Route path="/">
-          <HomePage />
-        </Route>
-      </Switch>
+      <HomeNavbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/shop/*" element={<ProductsPage  />} />
+        <Route path="/orders" element={authMember ? <OrdersPage /> : null} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/user/*" element={<UserPage />} />
+      </Routes>
+      <Footer />
     </div>
   );
 }
-
-export default App;
