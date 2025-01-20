@@ -24,8 +24,7 @@ export default function Footer() {
               <img width={"100px"}  src={"/icons/Luvr.svg"} />
             </Box>
             <Box className={"foot-desc-txt"}>
-              Let's make something great together. We are trusted by over 5000+
-              clients. Join them by using our services and grow your business.
+              Find the most desirable Cosmetic product with best quality that is available. We do our best to reach your satisfaction from cosmetics world. We are glad to see you! 
             </Box>
             <Box className="sns-context">
               <img src={"/icons/visa 1.svg"} />

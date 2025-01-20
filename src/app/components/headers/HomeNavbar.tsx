@@ -1,10 +1,14 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 import "../../../css/navbar.css";
 
 export function HomeNavbar() {
+    const navigate = useNavigate();
+
+    const homeClick = () => {
+        navigate('/products');
+    }
   return (
     <Box className="hero">
       <Container>
@@ -23,9 +27,9 @@ export function HomeNavbar() {
               beauty, people often think of personal accessories that make a
               difference to help the wearer stand out.
             </Box>
-            <NavLink to="/products" className="hero-button">
-              Explore
-            </NavLink>
+            <Box className="hero-button" onClick={homeClick} >
+                <Box className="explore">Explore</Box>
+            </Box>
           </Box>
         </Stack>
       </Container>

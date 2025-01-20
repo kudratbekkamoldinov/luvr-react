@@ -104,16 +104,21 @@
   width: 159px;
   height: 63px;
   background: var(--Accent-Color, #c28566);
-  color: var(--Home-2-Light, #faebe3);
-  font-family: Poppins;
-  font-size: 27px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 120%; /* 26.4px */
-  letter-spacing: 3.74px;
-  text-transform: capitalize;
+}
+
+.hero-button .explore {
+    color: var(--Home-2-Light, #FAEBE3);
+    font-family: Poppins;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 26.4px */
+    letter-spacing: 3.74px;
+    text-transform: capitalize;
+    text-align:center;
+  
 }
 
 .hero-button:hover {
-  background-color: #555;
+  background-color: #f9e957;
 }
