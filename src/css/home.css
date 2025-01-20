@@ -1,3 +1,60 @@
 .homepage {
-    width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+.homepage .category-frame {
+  width: 100%;
+  height: 529px;
+  display: flex;
+}
+
+.homepage .category-frame .category-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage .category-frame .category-section .cards-frame {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.homepage .category-frame .category-section .cards-frame .card {
+  width: 400px;
+  height: 450px;
+  cursor: pointer;
+  border-radius: 226.5px 226.5px 0px 0px;
+  
+  justify-items: end;
+}
+
+.homepage .category-frame .category-section .cards-frame .name {
+  width: 133px;
+  height: 133px;
+  border-radius: 78px;
+  background: var(--Accent-Opacity, #f7f0eb);
+
+  /* shadow */
+  box-shadow: 0px 7px 55px 0px rgba(9, 16, 20, 0.06);
+  
+}
+
+.homepage .category-frame .category-section .cards-frame .name .text {
+  
+  color: var(--Black, #394149);
+  font-family: Poppins;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 26.4px */
+  text-transform: capitalize;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
 }

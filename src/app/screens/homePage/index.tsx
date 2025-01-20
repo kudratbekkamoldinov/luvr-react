@@ -6,6 +6,7 @@ import FeaturedProducts from "./FeaturedProducts";
 import NewArrivals from "./NewArrivals";
 import Advertisement from "./Advertisement";
 import Events from "./Events";
+import "../../../css/home.css"
 
 export function HomePage() {
   return (
