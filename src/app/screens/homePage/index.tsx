@@ -1,7 +1,7 @@
 import React from "react"
 import Category from "./Category";
 import PopularProducts from "./PopularProducts";
-import Facilities from "./Facilities";
+import Facilities from "../../components/common/Facilities";
 import FeaturedProducts from "./FeaturedProducts";
 import NewArrivals from "./NewArrivals";
 import Advertisement from "./Advertisement";
@@ -16,8 +16,8 @@ export function HomePage() {
       <Facilities />
       <FeaturedProducts />
       <NewArrivals />
-      <Events />
       <Advertisement />
+      <Events />
     </div>
   );
 }

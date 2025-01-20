@@ -16,10 +16,14 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { Height } from "@mui/icons-material";
 
 const list = [
-  { productName: "Sauvage", imagePath: "/img/sauvages.jpg" },
-  { productName: "Chanel", imagePath: "/img/chanel.jpg" },
-  { productName: "Miss Dior", imagePath: "/img/ms.jpg" },
-  { productName: "Dior Lipstick", imagePath: "/img/diorlip.jpg" },
+  { productName: "Sauvage", imagePath: "/img/sauvages.jpg", productPrice: 120 },
+  { productName: "Chanel", imagePath: "/img/chanel.jpg", productPrice: 120 },
+  { productName: "Miss Dior", imagePath: "/img/ms.jpg", productPrice: 120 },
+  {
+    productName: "Dior Lipstick",
+    imagePath: "/img/diorlip.jpg",
+    productPrice: 120,
+  },
 ];
 
 export default function PopularProducts() {
@@ -31,21 +35,26 @@ export default function PopularProducts() {
           <Stack className="card-frame">
             {list.map((ele, index) => {
               return (
-                <Stack key={index}>
-                  <Stack className="card">
-                    <CardCover className="card-cover">
-                      <img src={ele.imagePath} alt="" />
-                    </CardCover>
+                <Stack key={index} className="card">
+                  <Stack className="card-img">
+                    <img src={ele.imagePath} alt="" className="image" />
                   </Stack>
                   <Stack className="card-info">
-                    <Stack style={{ justifyContent: "space-between" }}>
-                      <Stack>Perfume</Stack>
+                    <Stack className="info-box">
+                      <Stack className="category-text">Perfume</Stack>
                       <Stack>
-                        <img src={"/icons/review.svg"} />
+                        <img
+                          src={"/icons/review.svg"}
+                          alt="Review Stars"
+                          style={{ width: "128px", height: "20px" }}
+                        />
                       </Stack>
                     </Stack>
-                    <Stack></Stack>
-                    <Stack></Stack>
+                    <Stack className="info-name">{ele.productName}</Stack>
+                    <Stack className="info-price">
+                      <span className="price">${ele.productPrice}</span>
+                      <span className="discount" >-30%</span>
+                    </Stack>
                   </Stack>
                 </Stack>
               );

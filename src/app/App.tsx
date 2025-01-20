@@ -11,7 +11,7 @@ import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/home.css"
-
+import "../css/common.css"
 
 export default function App() {
   const location = useLocation(); // Detect current route

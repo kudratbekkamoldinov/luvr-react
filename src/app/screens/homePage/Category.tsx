@@ -6,7 +6,7 @@ export default function Category() {
     <div className="category-frame">
       <Container className="category-section">
         <Stack className="cards-frame">
-          <Box
+          <Stack
             className="card"
             style={{
               backgroundImage: 'url("/img/ms.jpg")',
@@ -19,8 +19,8 @@ export default function Category() {
             <Stack className="name" >
               <Typography className="text">Perfume</Typography>
             </Stack>
-          </Box>
-          <Box className="card" style={{
+          </Stack>
+          <Stack className="card" style={{
               backgroundImage: 'url("/img/diorlip.jpg")',
               backgroundColor: "lightgray",
               backgroundPosition: "50%",
@@ -30,8 +30,8 @@ export default function Category() {
             <Stack className="name">
               <Typography className="text">Makeup</Typography>
             </Stack>
-          </Box>
-          <Box className="card" style={{
+          </Stack>
+          <Stack className="card" style={{
               backgroundImage: 'url("/img/creamm.jpg")',
               backgroundColor: "lightgray",
               backgroundPosition: "50%",
@@ -41,7 +41,7 @@ export default function Category() {
             <Stack className="name">
               <Typography className="text">Skincare</Typography>
             </Stack>
-          </Box>
+          </Stack>
         </Stack>
       </Container>
     </div>
