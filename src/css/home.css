@@ -3,6 +3,7 @@
   height: auto;
 }
 
+/* Kategory Frame  */
 .homepage .category-frame {
   width: 100%;
   height: 529px;
@@ -29,7 +30,7 @@
   height: 450px;
   cursor: pointer;
   border-radius: 226.5px 226.5px 0px 0px;
-  
+
   justify-items: end;
 }
 
@@ -38,14 +39,15 @@
   height: 133px;
   border-radius: 78px;
   background: var(--Accent-Opacity, #f7f0eb);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
   /* shadow */
   box-shadow: 0px 7px 55px 0px rgba(9, 16, 20, 0.06);
-  
 }
 
 .homepage .category-frame .category-section .cards-frame .name .text {
-  
   color: var(--Black, #394149);
   font-family: Poppins;
   font-size: 22px;
@@ -53,8 +55,64 @@
   font-weight: 400;
   line-height: 120%; /* 26.4px */
   text-transform: capitalize;
+}
+
+/* Popular Products */
+.homepage .popular-frame {
+  width: 100%;
+  height: 580px;
+  display: flex;
+}
+
+.homepage .popular-frame .popular-section {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  
+}
+
+.homepage .popular-frame .popular-section .title {
+  color: var(--Black, #394149);
+  font-family: Poppins;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.MuiAspectRatio-content {
+  height: 350px;
+}
+.homepage .popular-frame .popular-section .card-frame {
+  width: 100%;
+  margin-top: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.homepage .popular-frame .card-frame .card {
+  width: 300px;
+  height: 400px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(26, 26, 26, 0.56) 0%,
+    rgba(255, 255, 255, 0) 63.53%
+  );
+  cursor: pointer;
+}
+
+.homepage .popular-frame .card-frame .card .card-cover {
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0) 200px
+    ),
+    linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 300px);
+}
+
+.homepage .popular-frame .card-frame .card .card-info {
+  width: 300px;
+  height: 400px;
+  cursor: pointer;
 }

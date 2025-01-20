@@ -16,9 +16,9 @@ export default function Category() {
               backgroundRepeat: "no-repeat",
             }}
           >
-            <Box className="name" >
+            <Stack className="name" >
               <Typography className="text">Perfume</Typography>
-            </Box>
+            </Stack>
           </Box>
           <Box className="card" style={{
               backgroundImage: 'url("/img/diorlip.jpg")',
@@ -27,9 +27,9 @@ export default function Category() {
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}>
-            <Box className="name">
+            <Stack className="name">
               <Typography className="text">Makeup</Typography>
-            </Box>
+            </Stack>
           </Box>
           <Box className="card" style={{
               backgroundImage: 'url("/img/creamm.jpg")',
@@ -38,9 +38,9 @@ export default function Category() {
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}>
-            <Box className="name">
+            <Stack className="name">
               <Typography className="text">Skincare</Typography>
-            </Box>
+            </Stack>
           </Box>
         </Stack>
       </Container>

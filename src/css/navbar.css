@@ -55,7 +55,7 @@
   margin-left: 70px;
   margin-top: 70px;
   color: var(--Accent-Color, #c28566);
-  font-family: Rubik;
+  font-family: "Rubik";
   font-size: 23px;
   font-weight: 500;
   font-style: normal;
@@ -68,7 +68,7 @@
   margin-left: 70px;
 
   color: var(--Black, #394149);
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 65px;
   font-style: normal;
   font-weight: 500;
@@ -78,7 +78,7 @@
 
 .highlight {
   color: var(--Accent-Color, #c28566);
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 65px;
   font-style: normal;
   font-weight: 500;
@@ -91,7 +91,7 @@
   margin-bottom: 40px;
 
   color: var(--Paragraph-Color, #616161);
-  font-family: Rubik;
+  font-family: "Rubik";
   font-size: 18px;
   font-style: normal;
   font-weight: 300;
@@ -104,11 +104,15 @@
   width: 159px;
   height: 63px;
   background: var(--Accent-Color, #c28566);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-button .explore {
     color: var(--Home-2-Light, #FAEBE3);
-    font-family: Poppins;
+    font-family: "Poppins";
     font-size: 28px;
     font-style: normal;
     font-weight: 500;
@@ -120,5 +124,6 @@
 }
 
 .hero-button:hover {
-  background-color: #f9e957;
+  background-color: #f9d82f;
+  
 }
