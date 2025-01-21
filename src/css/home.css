@@ -119,6 +119,7 @@
   flex-direction: row;
   justify-content: space-between;
   object-fit: cover;
+  border-radius: 10px;
 }
 
 .homepage .popular-frame .popular-section .card-frame .card-info {
