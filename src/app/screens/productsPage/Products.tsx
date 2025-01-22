@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Stack,
 } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 
 const products = [
   { productName: "Sauvage", imagePath: "/img/sauvages.jpg", productPrice: 120 },
@@ -261,7 +262,21 @@ export default function Products() {
             </Stack>
           </Stack>
 
-          <Stack className="pagination-section"></Stack>
+          <Stack className="pagination-section">
+            <Stack spacing={2}>
+              <Pagination
+                count={10}
+                variant="outlined"
+                shape="rounded"
+                sx={{
+                  "& .Mui-selected": {
+                    backgroundColor: "#C28566", // Change to your desired color
+                    color: "white",
+                  },
+                }}
+              />
+            </Stack>
+          </Stack>
         </Stack>
       </Container>
     </div>
