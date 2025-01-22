@@ -2,7 +2,6 @@ import React from "react"
 import Category from "./Category";
 import PopularProducts from "./PopularProducts";
 import Facilities from "../../components/common/Facilities";
-import FeaturedProducts from "./FeaturedProducts";
 import NewArrivals from "./NewArrivals";
 import Advertisement from "./Advertisement";
 import Events from "./Events";
@@ -14,7 +13,6 @@ export function HomePage() {
       <Category />
       <PopularProducts />
       <Facilities />
-      <FeaturedProducts />
       <NewArrivals />
       <Advertisement />
       <Events />
