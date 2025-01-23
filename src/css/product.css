@@ -121,7 +121,7 @@
 .product-frame .sidebar .sidebar-section .product-search .search-logo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 60px;
   height: 40px;
   background-color: #c28566;
@@ -131,10 +131,9 @@
 .product-frame .sidebar .sidebar-section .product-search .logo-search {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 60px;
-  height: 40px;
+  height: auto;
   
 }
 

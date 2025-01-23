@@ -62,7 +62,13 @@ export default function Products() {
                     />
                   </Stack>
                   <Stack className="search-logo">
-                    <Box ><img src="/icons/side-search.svg"/></Box>
+                    <Box>
+                      <img
+                        src="/icons/side-search.svg"
+                        alt="Search Icon"
+                        className="logo-search"
+                      />
+                    </Box>
                   </Stack>
                 </Stack>
                 <Stack className="sidebar-title">Collection</Stack>
