@@ -1,30 +1,21 @@
 import React, { useState } from "react";
 import {
   Box,
+  Button,
   Checkbox,
   Container,
   FormControlLabel,
   Stack,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
+import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
+import "../../../css/product.css";
 
 const products = [
   { productName: "Sauvage", imagePath: "/img/sauvages.jpg", productPrice: 120 },
   { productName: "Chanel", imagePath: "/img/chanel.jpg", productPrice: 120 },
   { productName: "Miss Dior", imagePath: "/img/ms.jpg", productPrice: 120 },
-  {
-    productName: "Dior Lipstick",
-    imagePath: "/img/diorlip.jpg",
-    productPrice: 120,
-  },
-  { productName: "Sauvage", imagePath: "/img/sauvages.jpg", productPrice: 120 },
-  { productName: "Chanel", imagePath: "/img/chanel.jpg", productPrice: 120 },
-  { productName: "Miss Dior", imagePath: "/img/ms.jpg", productPrice: 120 },
-  {
-    productName: "Dior Lipstick",
-    imagePath: "/img/diorlip.jpg",
-    productPrice: 120,
-  },
 ];
 
 export default function Products() {
@@ -37,6 +28,10 @@ export default function Products() {
       setProductCollection(e);
     }
   };
+
+  const [searchText, setSearchText] = useState<string>("");
+  const navigate = useNavigate();
+
   return (
     <div className="products">
       <Container style={{ height: "auto" }}>
@@ -53,6 +48,23 @@ export default function Products() {
           <Stack className="products-part">
             <Stack className="sidebar">
               <div className="sidebar-section">
+                <Stack className="product-search">
+                  <Stack>
+                    <input
+                      placeholder="Search"
+                      className="search-input"
+                      type="search"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                      onKeyDown={(e) => {
+                        // if (e.key === "Enter") searchProductHandler();
+                      }}
+                    />
+                  </Stack>
+                  <Stack className="search-logo">
+                    <Box ><img src="/icons/side-search.svg"/></Box>
+                  </Stack>
+                </Stack>
                 <Stack className="sidebar-title">Collection</Stack>
                 <Stack className="collection-list">
                   <Stack
