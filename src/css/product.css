@@ -460,4 +460,112 @@
   text-decoration: line-through;
 }
 
+.product-sizes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 30px;
+}
 
+.sizes-container {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  grid-auto-rows: auto; /* Automatically adjust row height */
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 8px;
+  width: 286px;
+  height: 76px;
+}
+
+.size-button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.size-button.active {
+  background-color: #b87352;
+  color: #fff;
+  border-color: #b87352;
+}
+
+.quantity-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100px;
+  height: 67px;
+  flex-shrink: 0;
+}
+
+.quantity-button {
+  padding: 8px;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #333;
+  cursor: pointer;
+}
+
+.quantity-display {
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.add-to-cart {
+  background-color: #f5f5f5;
+  color: #333;
+  flex: 1;
+  text-transform: none;
+  padding-bottom: 40px;
+}
+
+.buy-now {
+  background-color: #b87352;
+  color: #fff;
+  text-transform: none;
+  flex: 1;
+  padding-bottom: 40px;
+}
+
+.delivery-info {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin-top: 45px;
+  justify-content: space-between;
+}
+
+.delivery-info span {
+  display: flex;
+  flex-direction: row;
+  color: var(--Black, #394149);
+  font-family: "Poppins";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%; /* 28.8px */
+  align-items: center;
+}
+
+.delivery-info strong {
+  width: 400px;
+  color: var(--Paragraph-Color, #616161);
+  font-family: Rubik;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%; /* 32px */
+  margin-top: 14px;
+}
