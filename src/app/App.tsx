@@ -2,7 +2,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { HomeNavbar } from "./components/headers/HomeNavbar";
 import { HomePage } from "./screens/homePage";
 import { ProductsPage } from "./screens/productsPage";
-import { OrdersPage } from "./screens/ordersPage";
 import { AboutPage } from "./screens/aboutPage";
 import { UserPage } from "./screens/userPage";
 import { TopNavbar } from "./components/headers/TopNavbar";
@@ -12,6 +11,7 @@ import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/home.css"
 import "../css/common.css"
+import OrdersPage from "./screens/ordersPage";
 
 export default function App() {
   const location = useLocation(); // Detect current route
