@@ -185,15 +185,15 @@ export default function OrdersPage() {
               {/* Total Summary */}
               <div className="order-total-summary">
                 <div className="summary-item">
-                  <span>SubTotal:</span>
+                  <strong>SubTotal:</strong>
                   <span>$60.00</span>
                 </div>
                 <div className="summary-item">
-                  <span>Cargo:</span>
+                  <strong>Cargo:</strong>
                   <span>$0.00</span>
                 </div>
                 <div className="summary-item">
-                  <span>Discount:</span>
+                  <strong>Discount:</strong>
                   <span>$10.00</span>
                 </div>
                 <div className="summary-total">
