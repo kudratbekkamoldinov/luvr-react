@@ -88,7 +88,7 @@
 
 .experience .about-text strong {
   color: var(--Black, #394149);
-  font-family: Poppins;
+  font-family: "Poppins";
   font-size: 30px;
   font-style: normal;
   font-weight: 600;
@@ -97,7 +97,7 @@
 }
 .experience .about-text span {
   color: var(--Paragraph-Color, #616161);
-  font-family: Rubik;
+  font-family: "Rubik";
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

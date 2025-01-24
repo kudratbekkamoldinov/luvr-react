@@ -40,7 +40,7 @@ export function TopNavbar() {
           </NavLink>
 
           <NavLink to="/user">
-            <img className="icon" src="/icons/user.svg" />
+            <img className="icon" src="/icons/user.svg" alt="Profile Icon" />
           </NavLink>
         </Box>
       </Container>
