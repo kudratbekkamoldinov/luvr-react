@@ -10,8 +10,7 @@ import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/home.css"
 import "../css/common.css"
-import OrdersPage from "./screens/ordersPage";
-import UserPage from "./screens/userPage";
+import MyPage from "./screens/myPage";
 
 export default function App() {
   const location = useLocation(); // Detect current route
@@ -26,11 +25,10 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products/*" element={<ProductsPage />} />
         <Route
-          path="/orders"
-          element={authMember ? <OrdersPage /> : <div>Unauthorized</div>}
+          path="/mypage"
+          element={authMember ? <MyPage /> : null}
         />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/user/*" element={<UserPage />} />
       </Routes>
 
       <Footer />

@@ -1,11 +1,43 @@
-import React, { useState } from "react";
+import { Container } from "@mui/material";
 import "../../../css/order.css"; // Add custom styles
 import "../../../css/user.css";
-import { Container } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function OrdersPage() {
+export default function MyPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Parse query parameters from the URL
+  const queryParams = new URLSearchParams(location.search);
+  const initialSection = queryParams.get("section") || "Orders";
+
   // State to track the selected menu option
-  const [activeSection, setActiveSection] = useState("Orders");
+  const [activeSection, setActiveSection] = useState<string>(
+    initialSection as string
+  );
+
+  const [formData, setFormData] = useState({
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    phone: "+1234567890",
+  });
+
+  useEffect(() => {
+    navigate(`/mypage?section=${activeSection}`);
+  }, [activeSection]);
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log("Updated Profile:", formData);
+    // Call an API to save the updated profile details
+  };
 
   // Function to render content dynamically
   const renderContent = () => {
@@ -125,11 +157,51 @@ export default function OrdersPage() {
         );
       case "Profile":
         return (
-          <div>
+          <div className="profile-section">
             <h2>Profile Details</h2>
-            <p>Name: John Doe</p>
-            <p>Email: john.doe@example.com</p>
-            <p>Phone: +1234567890</p>
+            <form onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div>
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <button type="submit">Save Changes</button>
+            </form>
           </div>
         );
       default:

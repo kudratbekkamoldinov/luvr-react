@@ -22,11 +22,8 @@ export function TopNavbar() {
           <NavLink to="/products" className="nav-item">
             Products
           </NavLink>
-          <NavLink to="/orders" className="nav-item">
-            Orders
-          </NavLink>
-          <NavLink to="/user" className="nav-item">
-            User
+          <NavLink to="/mypage" className="nav-item">
+            My Page
           </NavLink>
           <NavLink to="/about" className="nav-item">
             About
@@ -39,7 +36,7 @@ export function TopNavbar() {
             <img className="icon" src="/icons/search.svg" />
           </NavLink>
 
-          <NavLink to="/user">
+          <NavLink to="/mypage?section=Profile">
             <img className="icon" src="/icons/user.svg" alt="Profile Icon" />
           </NavLink>
         </Box>
