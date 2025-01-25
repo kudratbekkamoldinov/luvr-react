@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { HomeNavbar } from "./components/headers/HomeNavbar";
 import { HomePage } from "./screens/homePage";
 import { ProductsPage } from "./screens/productsPage";
@@ -11,6 +11,7 @@ import "../css/footer.css";
 import "../css/home.css"
 import "../css/common.css"
 import MyPage from "./screens/myPage";
+import AuthPage from "./components/auth";
 
 export default function App() {
   const location = useLocation(); // Detect current route
@@ -26,9 +27,11 @@ export default function App() {
         <Route path="/products/*" element={<ProductsPage />} />
         <Route
           path="/mypage"
-          element={authMember ? <MyPage /> : null}
+          element={authMember ? <MyPage /> : <Navigate to="/login" replace/>}
         />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
 
       <Footer />

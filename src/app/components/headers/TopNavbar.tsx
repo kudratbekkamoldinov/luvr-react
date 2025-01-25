@@ -1,8 +1,23 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../../../css/topNavbar.css";
+import { useState } from "react";
 
 export function TopNavbar() {
+
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual auth state management
+
+  const handleMyPageClick = () => {
+    if (isLoggedIn) {
+      navigate("/mypage");
+    } else {
+      navigate("/auth"); // Assuming "/auth" is the route for Sign In/Sign Up
+    }
+  };
+
+
+  
   return (
     <div className="top-navbar">
       <Container className="top-navbar-container">
