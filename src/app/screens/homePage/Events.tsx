@@ -1,19 +1,20 @@
-import { Container, Stack } from "@mui/material";
 import React from "react";
+import { Box, Container, Stack } from "@mui/material";
+import Card from "@mui/joy/Card";
+import { CssVarsProvider, Typography } from "@mui/joy";
+import CardOverflow from "@mui/joy/CardOverflow";
+import AspectRatio from "@mui/joy/AspectRatio";
 
-const list = [
-  {
-    eventName: "The best summer fashion for everyone",
-    imagePath: "/img/chg.jpg",
-  },
-  {
-    eventName: "Best deals of this spring season",
-    imagePath: "/img/chanelparis.jpg",
-  },
-  { eventName: "Check out the Top Rated Products", imagePath: "/img/vl1.jpg" },
-];
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveEvents } from "./selector";
+
+const eventsRetrieve = createSelector(retrieveEvents, (events) => ({
+  events,
+}));
 
 export default function Events() {
+  const { events } = useSelector(eventsRetriever);
   return (
     <div className="event-frame">
       <Container>

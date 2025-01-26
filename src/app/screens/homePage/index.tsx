@@ -5,14 +5,13 @@ import Facilities from "../../components/common/Facilities";
 import NewArrivals from "./NewArrivals";
 import Advertisement from "./Advertisement";
 import Events from "./Events";
-import { useDispatch } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
-import "../../../css/home.css";
 import { setEvents, setNewProducts, setPopularProducts } from "./slice";
 import { Product } from "../../../libs/types/product";
 import { ProductCollection } from "../../../libs/enums/product.enum";
+import "../../../css/home.css";
 
 /* redux slice & selector */
 const actionDispatch = (dispatch: Dispatch) => ({
