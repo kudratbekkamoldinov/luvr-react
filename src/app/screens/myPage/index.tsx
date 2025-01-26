@@ -3,10 +3,12 @@ import "../../../css/order.css"; // Add custom styles
 import "../../../css/user.css";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useGlobals } from "../../hooks/useGlobals";
 
 export default function MyPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { authMember } = useGlobals();
 
   // Parse query parameters from the URL
   const queryParams = new URLSearchParams(location.search);
@@ -18,6 +20,7 @@ export default function MyPage() {
   );
 
   const [formData, setFormData] = useState({
+    // name: memberNick, 
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
@@ -162,7 +165,7 @@ export default function MyPage() {
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div>
-                  <label>First Name</label>
+                  <label>{formData.firstName}</label>
                   <input
                     type="text"
                     name="firstName"

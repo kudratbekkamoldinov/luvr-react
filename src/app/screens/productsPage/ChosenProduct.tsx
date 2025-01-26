@@ -4,12 +4,77 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Facilities from "../../components/common/Facilities";
 import PopularProducts from "../homePage/PopularProducts";
 import NewArrivalProducts from "../homePage/NewArrivals";
 
-export default function ChosenProduct() {
+// import { Dispatch } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
+import { setChosenProduct, setShop } from "./slice";
+import { useDispatch, useSelector } from "react-redux";
+import { retrieveChosenProduct, retrieveShop } from "./selector";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useParams } from "react-router-dom";
+import ProductService from "../../services/ProductService";
+import MemberService from "../../services/MemberService";
+import { Member } from "../../../libs/types/member";
+import { Product } from "../../../libs/types/product";
+import { CartItem } from "../../../libs/types/search";
+import { serverApi } from "../../../libs/config";
+
+const actionDispatch = (dispatch: Dispatch) => ({
+  setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
+  setShop: (data: Member) => dispatch(setShop(data)),
+});
+
+const ChosenProductRetrieve = createSelector(
+  retrieveChosenProduct,
+  (chosenProduct) => ({
+    chosenProduct,
+  })
+);
+
+const ShopRetrieve = createSelector(retrieveShop, (shop) => ({
+  shop,
+}));
+
+interface ChosenProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function ChosenProduct(props: ChosenProductsProps) {
+  const { onAdd } = props;
+  const { setChosenProduct } = actionDispatch(useDispatch());
+  const { setShop } = actionDispatch(useDispatch());
+  const { chosenProduct } = useSelector(ChosenProductRetrieve);
+  console.log("chosenProduct:", chosenProduct);
+  const { shop } = useSelector(ShopRetrieve);
+  console.log("shop:", shop);
+
+  /* Hook */
+  const { productId } = useParams();
+  console.log("id", productId);
+
+  useEffect(() => {
+    const product = new ProductService();
+
+    if (productId) {
+      product
+        .getProduct(productId)
+        .then((data) => setChosenProduct(data))
+        .catch((err) => console.log("Err chosenProduct:", err));
+    }
+
+    const member = new MemberService();
+    member
+      .getShop()
+      .then((data) => setShop(data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (!chosenProduct) return null;
+
   const [selectedSize, setSelectedSize] = useState<string>("30ml");
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -34,6 +99,10 @@ export default function ChosenProduct() {
     );
   };
 
+  if (!productId) {
+    return null;
+  }
+
   return (
     <div className="chosen-product">
       <Container>
@@ -46,11 +115,12 @@ export default function ChosenProduct() {
               modules={[FreeMode, Navigation, Thumbs]}
               className="swiper-area"
             >
-              {["/img/sauvage.jpg", "/img/sauvages.jpg"].map(
+              {chosenProduct?.productImages.map(
                 (ele: string, index: number) => {
+                  const imagePath = `${serverApi}/${ele}`;
                   return (
                     <SwiperSlide key={index}>
-                      <img className="slider-image" src={ele} />
+                      <img className="slider-image" src={imagePath} />
                     </SwiperSlide>
                   );
                 }
@@ -58,10 +128,10 @@ export default function ChosenProduct() {
             </Swiper>
           </Stack>
           <Stack className="chosen-product-info">
-            <Stack className="product-title">Dior Sauvage</Stack>
+            <Stack className="product-title">{chosenProduct.productName}</Stack>
             <Stack className="product-price">
-              <strong>$20.00</strong>
-              <span>$25.00</span>
+              <strong>${chosenProduct.productPrice}</strong>
+              <span>${chosenProduct.productPrice * 0.2}</span>
             </Stack>
             <Stack className="product-size"></Stack>
             <Stack spacing={2} className="product-sizes">
@@ -106,7 +176,21 @@ export default function ChosenProduct() {
 
               {/* Action Buttons */}
               <Stack direction="row" spacing={2}>
-                <Button variant="contained" className="add-to-cart">
+                <Button
+                  variant="contained"
+                  className="add-to-cart"
+                  onClick={(e) => {
+                    console.log("Button Press");
+                    onAdd({
+                      _id: chosenProduct._id,
+                      quantity: 1,
+                      name: chosenProduct.productName,
+                      price: chosenProduct.productPrice,
+                      image: chosenProduct.productImages[0],
+                    });
+                    e.stopPropagation();
+                  }}
+                >
                   Add To Cart
                 </Button>
                 <Button variant="contained" className="buy-now">
@@ -156,8 +240,8 @@ export default function ChosenProduct() {
         <Stack>
           <Facilities />
         </Stack>
-        <Stack style={{marginTop: "80px"}}>
-          <NewArrivalProducts/>
+        <Stack style={{ marginTop: "80px" }}>
+          <NewArrivalProducts />
         </Stack>
       </Container>
     </div>

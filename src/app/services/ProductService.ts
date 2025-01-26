@@ -12,13 +12,15 @@ class ProductService {
 
   public async getProducts(input: ProductInquiry): Promise<Product[]> {
     try {
+      
       let url = `${this.path}/product/all/?order=${input.order}&page=${input.page}&limit=${input.limit}`;
       if (input.productCollection)
         url += `&productCollection=${input.productCollection}`;
       if (input.search) url += `&search=${input.search}`;
 
       const result = await axios.get(url);
-      console.log("getProducts:", result);
+      console.log("getProducts:", result.data);
+      // 'http://localhost:2000/product/all?order=createdAt&page=1&limit=8&productCollection=Perfume'
 
       return result.data;
     } catch (err) {

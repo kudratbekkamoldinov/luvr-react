@@ -1,34 +1,33 @@
+import { Container, Stack } from "@mui/material";
 import React from "react";
-import { Box, Container, Stack } from "@mui/material";
 
-
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
-import { retrieveEvents } from "./selector";
-import { serverApi } from "../../../libs/config";
-
-const eventsRetriever = createSelector(retrieveEvents, (events) => ({
-  events,
-}));
+const list = [
+  {
+    eventName: "The best summer fashion for everyone",
+    imagePath: "/img/lvi.jpg",
+  },
+  {
+    eventName: "Best deals of this spring season",
+    imagePath: "/img/chanelparis.jpg",
+  },
+  { eventName: "Check out the Top Rated Products", imagePath: "/img/vl1.jpg" },
+];
 
 export default function Events() {
-  const { events } = useSelector(eventsRetriever);
   return (
     <div className="event-frame">
       <Container>
         <Stack className="event-section">
           <Stack className="event-title">Latest & Gratest</Stack>
           <Stack className="event-blog">
-          {events.length !== 0 ? (
-                events.map((event: Event) => {
-                  const imagePath = `${serverApi}/${event.eventImage}`;
+            {list.map((ele, index) => {
               return (
-                <Stack key={event._id} className="blog">
+                <Stack key={index} className="blog">
                   <Stack className="blog-image">
-                    <img src={imagePath} alt="" className="image" />
+                    <img src={ele.imagePath} alt="" className="image" />
                     <Stack className="blog-text">
                       <strong className="blog-strong">
-                        {event.eventName}
+                        {ele.eventName}
                       </strong>
                       <span className="blog-date">January 21 , 2025</span>
                       <span className="blog-description">
@@ -41,10 +40,7 @@ export default function Events() {
                   </Stack>
                 </Stack>
               );
-            })
-          ) : (
-            <Box className="no-data">Events are not avaiable!</Box>
-          )}
+            })}
           </Stack>
         </Stack>
       </Container>

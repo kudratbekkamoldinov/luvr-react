@@ -6,10 +6,10 @@ import Menu from "@mui/material/Menu";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useHistory } from "react-router-dom";
-import { CartItem } from "../../../lib/types/search";
-import { Messages, serverApi } from "../../../lib/config";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { useNavigate } from "react-router-dom";
+import { Messages, serverApi } from "../../../libs/config";
+import { sweetErrorHandling } from "../../../libs/sweetAlert";
+import { CartItem } from "../../../libs/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrderService";
 
@@ -24,7 +24,7 @@ interface BasketProps {
 export default function Basket(props: BasketProps) {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
   const {authMember, setOrderBuilder} = useGlobals();
-  const history = useHistory();
+  const history = useNavigate();
   const itemsPrice: number = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,
     0
@@ -57,7 +57,7 @@ export default function Basket(props: BasketProps) {
       // Refresh  via context
       setOrderBuilder(new Date());
 
-      history.push("/orders");
+      history("/orders");
     } catch (err) {
       console.log(err);
       sweetErrorHandling(err).then();

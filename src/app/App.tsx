@@ -1,8 +1,5 @@
 import { Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { HomeNavbar } from "./components/headers/HomeNavbar";
-import { HomePage } from "./screens/homePage";
-import { ProductsPage } from "./screens/productsPage";
-import { AboutPage } from "./screens/aboutPage";
 import { TopNavbar } from "./components/headers/TopNavbar";
 import Footer from "./components/footer";
 import "../css/app.css";
@@ -16,12 +13,20 @@ import { useState } from "react";
 import { Messages } from "../libs/config";
 import { sweetTopSuccessAlert, sweetErrorHandling } from "../libs/sweetAlert";
 import { useGlobals } from "./hooks/useGlobals";
+
 import MemberService from "./services/MemberService";
+import ProductsPage from "./screens/productsPage/Products";
+import { AboutPage } from "./screens/aboutPage";
+import useBasket from "./hooks/useBasket";
+import HomePage from "./screens/homePage";
+
 
 export default function App() {
   const location = useLocation(); // Detect current route
   const authMember = true;
   console.log("location", location);
+
+  const {onAdd} = useBasket();
 
   const { setAuthMember } = useGlobals();
 
@@ -57,7 +62,7 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/products/*" element={<ProductsPage />} />
+        <Route path="/products/*" element={<ProductsPage onAdd={onAdd} />} />
         <Route
           path="/mypage"
           element={authMember ? <MyPage /> : <Navigate to="/login" replace/>}

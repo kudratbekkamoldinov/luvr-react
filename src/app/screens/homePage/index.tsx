@@ -12,18 +12,19 @@ import { setEvents, setNewProducts, setPopularProducts } from "./slice";
 import { Product } from "../../../libs/types/product";
 import { ProductCollection } from "../../../libs/enums/product.enum";
 import "../../../css/home.css";
+import { useDispatch } from "react-redux";
 
 /* redux slice & selector */
 const actionDispatch = (dispatch: Dispatch) => ({
   setPopularProducts: (data: Product[]) => dispatch(setPopularProducts(data)),
   setNewProducts: (data: Product[]) => dispatch(setNewProducts(data)),
-  setEvents: (data: Event[]) => dispatch(setEvents(data)),
+  // setEvents: (data: Event[]) => dispatch(setEvents(data)),
 });
 
-export function HomePage() {
-  const actionDispatch = (dispatch: Dispatch) => ({
-    setPopularProducts: (data: Product[]) => dispatch(setPopularProducts(data)),
-  });
+export default function HomePage() {
+  const { setPopularProducts, setNewProducts } = actionDispatch(
+    useDispatch()
+  );
   
   // Selector: Store => Data
   console.log(process.env.REACT_APP_API_URL);
@@ -35,7 +36,7 @@ export function HomePage() {
       .getProducts({
         page: 1,
         limit: 4,
-        order: "productViews",
+        order: "createdAt",
         productCollection: ProductCollection.PERFUME,
       })
       .then((data) => {
@@ -52,11 +53,11 @@ export function HomePage() {
       .then((data) => setNewProducts(data))
       .catch((err) => console.log(err));
 
-    const member = new MemberService();
-    member
-      .getEvents()
-      .then((data) => setEvents(data))
-      .catch((err) => console.log(err));
+    // const member = new MemberService();
+    // member
+    //   .getEvents()
+    //   .then((data) => setEvents(data))
+    //   .catch((err) => console.log(err));
     // Slice: Data => Store
   }, []);
   return (

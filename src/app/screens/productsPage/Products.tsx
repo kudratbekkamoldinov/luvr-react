@@ -12,10 +12,12 @@ import { ProductCollection } from "../../../libs/enums/product.enum";
 import ProductService from "../../services/ProductService";
 import { Product, ProductInquiry } from "../../../libs/types/product";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
-import "../../../css/product.css";
 import { CartItem } from "../../../libs/types/search";
-import { useHistory } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { retrieveProducts } from "./selector";
+import { setProducts } from "./slice";
+import "../../../css/product.css";
+import { serverApi } from "../../../libs/config";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Product[]) => dispatch(setProducts(data)),
@@ -29,7 +31,7 @@ interface ProductsProps {
   onAdd: (item: CartItem) => void;
 }
 
-export default function Products(props: ProductsProps) {
+export default function ProductsPage(props: ProductsProps) {
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(ProductsRetriever);
@@ -43,7 +45,7 @@ export default function Products(props: ProductsProps) {
   });
 
   const [searchText, setSearchText] = useState<string>("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const product = new ProductService();
@@ -87,8 +89,8 @@ export default function Products(props: ProductsProps) {
     setProductSearch({ ...productSearch });
   };
 
-  const chooseDishHandler = (id: string) => {
-    history.push(`/products/${id}`);
+  const chooseProductHandler = (id: string) => {
+    navigate(`/products/${id}`);
   };
 
   return (
@@ -116,7 +118,7 @@ export default function Products(props: ProductsProps) {
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
                       onKeyDown={(e) => {
-                        // if (e.key === "Enter") searchProductHandler();
+                        if (e.key === "Enter") searchProductHandler();
                       }}
                     />
                   </Stack>
@@ -134,12 +136,13 @@ export default function Products(props: ProductsProps) {
                 <Stack className="collection-list">
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Perfume")}
+                    onClick={() => searchCollectionHandler(ProductCollection.PERFUME)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Perfume"
+                          productSearch.productCollection ===
+                    ProductCollection.PERFUME
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -150,7 +153,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Perfume"
+                          productSearch.productCollection ===
+                    ProductCollection.PERFUME
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -161,12 +165,13 @@ export default function Products(props: ProductsProps) {
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Makeup")}
+                    onClick={() => searchCollectionHandler(ProductCollection.MAKEUP)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Makeup" ? "#C28566" : "#394149"
+                          productSearch.productCollection ===
+                    ProductCollection.MAKEUP ? "#C28566" : "#394149"
                         }`,
                       }}
                     >
@@ -175,7 +180,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Makeup" ? "#C28566" : "#394149"
+                          productSearch.productCollection ===
+                    ProductCollection.MAKEUP ? "#C28566" : "#394149"
                         }`,
                       }}
                     >
@@ -184,12 +190,13 @@ export default function Products(props: ProductsProps) {
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Fashion")}
+                    onClick={() => searchCollectionHandler(ProductCollection.FASHION)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Fashion"
+                          productSearch.productCollection ===
+                    ProductCollection.FASHION
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -200,7 +207,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Fashion"
+                          productSearch.productCollection ===
+                    ProductCollection.FASHION
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -211,12 +219,13 @@ export default function Products(props: ProductsProps) {
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Cream")}
+                    onClick={() => searchCollectionHandler(ProductCollection.CREAM)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Cream" ? "#C28566" : "#394149"
+                          productSearch.productCollection ===
+                    ProductCollection.CREAM ? "#C28566" : "#394149"
                         }`,
                       }}
                     >
@@ -225,7 +234,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Cream" ? "#C28566" : "#394149"
+                          productSearch.productCollection ===
+                    ProductCollection.CREAM ? "#C28566" : "#394149"
                         }`,
                       }}
                     >
@@ -234,12 +244,13 @@ export default function Products(props: ProductsProps) {
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Essential Oil")}
+                    onClick={() => searchCollectionHandler(ProductCollection.ESSENTIAL_OIL)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Essential Oil"
+                          productSearch.productCollection ===
+                    ProductCollection.ESSENTIAL_OIL
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -250,7 +261,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Essential Oil"
+                          productSearch.productCollection ===
+                    ProductCollection.ESSENTIAL_OIL
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -261,12 +273,13 @@ export default function Products(props: ProductsProps) {
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => productCollectionHandler("Body Lotion")}
+                    onClick={() => searchCollectionHandler(ProductCollection.BODY_LOTION)}
                   >
                     <strong
                       style={{
                         color: `${
-                          productCollection === "Body Lotion"
+                          productSearch.productCollection ===
+                    ProductCollection.BODY_LOTION
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -277,7 +290,8 @@ export default function Products(props: ProductsProps) {
                     <span
                       style={{
                         color: `${
-                          productCollection === "Body Lotion"
+                          productSearch.productCollection ===
+                    ProductCollection.BODY_LOTION
                             ? "#C28566"
                             : "#394149"
                         }`,
@@ -306,13 +320,19 @@ export default function Products(props: ProductsProps) {
               </div>
             </Stack>
             <Stack className="f-card-grid">
-              {products.map((ele, index) => {
+            {products.length !== 0 ? (
+                products.map((product) => {
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+                  // const sizeVolume =
+                  //   product.productCollection === ProductCollection.PERFUME
+                      
+                  //      product.productSize + "size";
                 return (
-                  <Stack key={index} className="f-card">
+                  <Stack key={product._id} className="f-card">
                     <Stack className="f-card-img">
                       <img
-                        src={ele.imagePath}
-                        alt={ele.productName}
+                        src={imagePath}
+                        alt={product.productName}
                         className="f-image"
                       />
                     </Stack>
@@ -327,15 +347,18 @@ export default function Products(props: ProductsProps) {
                           />
                         </Stack>
                       </Stack>
-                      <Stack className="f-info-name">{ele.productName}</Stack>
+                      <Stack className="f-info-name">{product.productName}</Stack>
                       <Stack className="f-info-price">
-                        <span className="f-price">${ele.productPrice}</span>
+                        <span className="f-price">${product.productPrice}</span>
                         <span className="f-discount">-30%</span>
                       </Stack>
                     </Stack>
                   </Stack>
                 );
-              })}
+              })
+            ) : (
+              <Box className="no-data">Popular product are not avaiable!</Box>
+            )}
             </Stack>
           </Stack>
 
