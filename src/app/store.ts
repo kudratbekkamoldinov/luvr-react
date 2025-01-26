@@ -8,8 +8,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat(reduxLogger),
   reducer: {
     homePage: HomePageReducer,
-    productsPage: ProductsPageReducer,
-    ordersPage: OrdersPageReducer,
+    // productsPage: ProductsPageReducer,
+    // ordersPage: OrdersPageReducer,
   },
 });
 
