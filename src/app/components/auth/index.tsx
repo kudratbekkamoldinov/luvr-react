@@ -19,7 +19,7 @@ export default function AuthPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh",
+          height: "600px",
           backgroundColor: "#f9f9f9",
           padding: 2,
         }}
