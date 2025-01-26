@@ -50,7 +50,9 @@ export function TopNavbar() {
           <NavLink to="/products">
             <img className="icon" src="/icons/search.svg" />
           </NavLink>
-
+          <NavLink to="/mypage?section=orders">
+            <img className="icon" src="/icons/cart.svg" alt="Cart Icon" />
+          </NavLink>
           <NavLink to="/mypage?section=Profile">
             <img className="icon" src="/icons/user.svg" alt="Profile Icon" />
           </NavLink>

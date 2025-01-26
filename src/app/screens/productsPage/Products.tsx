@@ -1,36 +1,95 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Checkbox,
   Container,
   FormControlLabel,
   Stack,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ProductCollection } from "../../../libs/enums/product.enum";
+import ProductService from "../../services/ProductService";
+import { Product, ProductInquiry } from "../../../libs/types/product";
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import "../../../css/product.css";
+import { CartItem } from "../../../libs/types/search";
+import { useHistory } from "react-router-dom";
 
-const products = [
-  { productName: "Sauvage", imagePath: "/img/sauvages.jpg", productPrice: 120 },
-  { productName: "Chanel", imagePath: "/img/chanel.jpg", productPrice: 120 },
-  { productName: "Miss Dior", imagePath: "/img/ms.jpg", productPrice: 120 },
-];
 
-export default function Products() {
-  const [productCollection, setProductCollection] = useState<string>();
+const actionDispatch = (dispatch: Dispatch) => ({
+  setProducts: (data: Product[]) => dispatch(setProducts(data)),
+});
 
-  const productCollectionHandler = (e: string) => {
-    if (productCollection === e) {
-      setProductCollection("");
-    } else {
-      setProductCollection(e);
-    }
-  };
+const ProductsRetriever = createSelector(retrieveProducts, (products) => ({
+  products,
+}));
+
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function Products(props: ProductsProps) {
+  const { onAdd } = props;
+  const { setProducts } = actionDispatch(useDispatch());
+  const { products } = useSelector(ProductsRetriever);
+  console.log("products:", products);
+  const [productSearch, setProductSearch] = useState<ProductInquiry>({
+    page: 1,
+    limit: 8,
+    order: "createdAt",
+    productCollection: ProductCollection.PERFUME,
+    search: "",
+  });
 
   const [searchText, setSearchText] = useState<string>("");
-  const navigate = useNavigate();
+  const history = useHistory();
+
+  useEffect(() => {
+    const product = new ProductService();
+
+    product
+      .getProducts(productSearch)
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((err) => err);
+  }, [productSearch]);
+
+  useEffect(() => {
+    if (searchText === "") {
+      productSearch.search = "";
+      setProductSearch({ ...productSearch });
+    }
+  }, [searchText]);
+
+  /* Handlers */
+
+  const searchCollectionHandler = (collection: ProductCollection) => {
+    productSearch.page = 1;
+    productSearch.productCollection = collection;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchOrderHandler = (order: string) => {
+    productSearch.page = 1;
+    productSearch.order = order;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchProductHandler = () => {
+    productSearch.search = searchText;
+    setProductSearch({ ...productSearch });
+  };
+
+  const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+    productSearch.page = value;
+    setProductSearch({ ...productSearch });
+  };
+
+  const chooseDishHandler = (id: string) => {
+    history.push(`/products/${id}`);
+  };
 
   return (
     <div className="products">

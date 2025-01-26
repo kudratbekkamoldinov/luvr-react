@@ -54,7 +54,7 @@ export function HomePage() {
 
     const member = new MemberService();
     member
-      .getTopUsers()
+      .getEvents()
       .then((data) => setEvents(data))
       .catch((err) => console.log(err));
     // Slice: Data => Store

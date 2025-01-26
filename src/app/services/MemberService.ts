@@ -9,30 +9,30 @@ class MemberService {
     this.path = serverApi;
   }
 
-  public async getTopUsers(): Promise<Member[]> {
+  public async getEvents(): Promise<Event[]> {
     try {
-      let url = `${this.path}/member/top-users`;
+      let url = `${this.path}/member/events`;
 
       const result = await axios.get(url);
-      console.log("getTopUsers:", result);
+      console.log("getEvents:", result);
 
       return result.data;
     } catch (err) {
-      console.log("Error, getTopUsers:", err);
+      console.log("Error, getEvents:", err);
       throw err;
     }
   }
 
-  public async getRestaurant(): Promise<Member> {
+  public async getShop(): Promise<Member> {
     try {
-      let url = `${this.path}/member/restaurant`;
+      let url = `${this.path}/member/shop`;
 
       const result = await axios.get(url);
-      console.log("getRestaurant:", result);
+      console.log("getShop:", result);
 
       return result.data;
     } catch (err) {
-      console.log("Error, getRestaurant:", err);
+      console.log("Error, getShop:", err);
       throw err;
     }
   }

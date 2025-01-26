@@ -1,15 +1,13 @@
 import React from "react";
 import { Box, Container, Stack } from "@mui/material";
-import Card from "@mui/joy/Card";
-import { CssVarsProvider, Typography } from "@mui/joy";
-import CardOverflow from "@mui/joy/CardOverflow";
-import AspectRatio from "@mui/joy/AspectRatio";
+
 
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveEvents } from "./selector";
+import { serverApi } from "../../../libs/config";
 
-const eventsRetrieve = createSelector(retrieveEvents, (events) => ({
+const eventsRetriever = createSelector(retrieveEvents, (events) => ({
   events,
 }));
 
@@ -21,14 +19,16 @@ export default function Events() {
         <Stack className="event-section">
           <Stack className="event-title">Latest & Gratest</Stack>
           <Stack className="event-blog">
-            {list.map((ele, index) => {
+          {events.length !== 0 ? (
+                events.map((event: Event) => {
+                  const imagePath = `${serverApi}/${event.eventImage}`;
               return (
-                <Stack key={index} className="blog">
+                <Stack key={event._id} className="blog">
                   <Stack className="blog-image">
-                    <img src={ele.imagePath} alt="" className="image" />
+                    <img src={imagePath} alt="" className="image" />
                     <Stack className="blog-text">
                       <strong className="blog-strong">
-                        {ele.eventName}
+                        {event.eventName}
                       </strong>
                       <span className="blog-date">January 21 , 2025</span>
                       <span className="blog-description">
@@ -41,7 +41,10 @@ export default function Events() {
                   </Stack>
                 </Stack>
               );
-            })}
+            })
+          ) : (
+            <Box className="no-data">Events are not avaiable!</Box>
+          )}
           </Stack>
         </Stack>
       </Container>
