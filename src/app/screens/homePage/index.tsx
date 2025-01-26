@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Category from "./Category";
 import PopularProducts from "./PopularProducts";
 import Facilities from "../../components/common/Facilities";
@@ -8,6 +8,12 @@ import Events from "./Events";
 import "../../../css/home.css"
 
 export function HomePage() {
+  // Selector: Store => Data
+  useEffect(() => {
+    // Backend server data
+
+    // Slice: Data => Store
+  }, [])
   return (
     <div className="homepage">
       <Category />
