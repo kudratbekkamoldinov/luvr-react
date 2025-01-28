@@ -1,23 +1,37 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../../../css/topNavbar.css";
 import { useState } from "react";
+import { CartItem } from "../../../libs/types/search";
+import { useGlobals } from "../../hooks/useGlobals";
+import Basket from "./Basket";
 
-export function TopNavbar() {
+interface TopNavbarProps {
+  cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
+  setSignupOpen: (isOpen: boolean) => void;
+  setLoginOpen: (isOpen: boolean) => void;
+  anchoEl: HTMLElement | null;
+}
 
-  const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual auth state management
+export function TopNavbar(props: TopNavbarProps) {
+  const {
+    cartItems,
+    onAdd,
+    onRemove,
+    onDelete,
+    onDeleteAll,
+    setSignupOpen,
+    setLoginOpen,
+    anchoEl,
+  } = props;
 
-  const handleMyPageClick = () => {
-    if (isLoggedIn) {
-      navigate("/mypage");
-    } else {
-      navigate("/auth"); // Assuming "/auth" is the route for Sign In/Sign Up
-    }
-  };
+  const { authMember } = useGlobals();
 
 
-  
   return (
     <div className="top-navbar">
       <Container className="top-navbar-container">
@@ -37,21 +51,40 @@ export function TopNavbar() {
           <NavLink to="/products" className="nav-item">
             Products
           </NavLink>
-          <NavLink to="/mypage" className="nav-item">
-            My Page
-          </NavLink>
+          {authMember ? (
+            <NavLink to="/mypage" className="nav-item">
+              My Page
+            </NavLink>
+          ) : null}
+          {!authMember ? (
+              <Button
+                variant="contained"
+                className="login-button"
+                onClick={() => setLoginOpen(true)}
+                style={{textTransform: "capitalize", fontSize: 18, padding: "0px"}}
+              >
+                Login
+              </Button>
+          ) : null}
           <NavLink to="/about" className="nav-item">
             About
           </NavLink>
         </Box>
 
-        {/* Icons and Profile */}
         <Box className="nav-icons">
           <NavLink to="/products">
             <img className="icon" src="/icons/search.svg" />
           </NavLink>
           <NavLink to="/mypage?section=orders">
-            <img className="icon" src="/icons/cart.svg" alt="Cart Icon" />
+            {authMember ? (
+              <Basket
+                cartItems={cartItems}
+                onAdd={onAdd}
+                onRemove={onRemove}
+                onDelete={onDelete}
+                onDeleteAll={onDeleteAll}
+              />
+            ) : null}
           </NavLink>
           <NavLink to="/mypage?section=Profile">
             <img className="icon" src="/icons/user.svg" alt="Profile Icon" />

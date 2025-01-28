@@ -26,6 +26,7 @@ export interface ProductInquiry {
   limit: number;
   productCollection?: ProductCollection;
   search?: string;
+  capacities?: string[];
 }
 
 export interface ProductInput {

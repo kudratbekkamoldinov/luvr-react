@@ -3,10 +3,11 @@ import { CartItem } from "../../libs/types/search";
 
 const useBasket = () => {
   const cartJson: string | null = localStorage.getItem("cartData");
-  const currenCart = cartJson ? JSON.parse(cartJson) : [];
-  const [cartItems, setCartItems] = useState<CartItem[]>(currenCart);
+  const currentCart = cartJson ? JSON.parse(cartJson) : [];
+  const [cartItems, setCartItems] = useState<CartItem[]>(currentCart);
 
   const onAdd = (input: CartItem) => {
+    console.log("onadd:", input);
     const exist: any = cartItems.find(
       (item: CartItem) => item._id === input._id
     );

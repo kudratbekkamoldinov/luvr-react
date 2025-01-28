@@ -5,6 +5,7 @@ import { retrievePopularProducts } from "./selector";
 import { serverApi } from "../../../libs/config";
 import { useSelector } from "react-redux";
 import { Product } from "../../../libs/types/product";
+import { useNavigate } from "react-router-dom";
 
 const PopularProductsRetriever = createSelector(
   retrievePopularProducts,
@@ -13,7 +14,13 @@ const PopularProductsRetriever = createSelector(
 
 export default function PopularProducts() {
   const { popularProducts } = useSelector(PopularProductsRetriever);
+  const navigate = useNavigate();
+
   console.log("popularDishes:", popularProducts);
+
+  const handleProductClick = (productId: string) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
     <div className="popular-frame">
@@ -25,7 +32,7 @@ export default function PopularProducts() {
               popularProducts.map((product: Product) => {
                 const imagePath = `${serverApi}/${product.productImages[0]}`;
                 return (
-                  <Stack key={product._id} className="card">
+                  <Stack key={product._id} className="card" onClick={() => handleProductClick(product._id)} sx={{cursor: "pointer"}}>
                     <Stack className="card-img">
                       <img src={imagePath} alt="" className="image" />
                     </Stack>

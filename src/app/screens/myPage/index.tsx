@@ -1,31 +1,172 @@
-import { Container } from "@mui/material";
-import "../../../css/order.css"; // Add custom styles
-import "../../../css/user.css";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Container } from "@mui/material";
+import React, { Dispatch, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGlobals } from "../../hooks/useGlobals";
+import {
+  Order,
+  OrderInquiry,
+  OrderUpdateInput,
+} from "../../../libs/types/order";
+import { setPausedOrders, setProcessOrders, setFinishedOrders } from "./slice";
+import { useDispatch, useSelector } from "react-redux";
+import { OrderStatus } from "../../../libs/enums/order.enum";
+import OrderService from "../../services/OrderService";
+import { createSelector } from "@reduxjs/toolkit";
+import {
+  retrieveFinishedOrders,
+  retrievePausedOrders,
+  retrieveProcessOrders,
+} from "./selector";
+import "../../../css/order.css";
+import "../../../css/user.css";
+import { Messages, serverApi } from "../../../libs/config";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../libs/sweetAlert";
+import { T } from "../../../libs/types/common";
+import moment from "moment";
+import MemberService from "../../services/MemberService";
+
+const actionDispatch = (dispatch: Dispatch<any>) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+  setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
+});
+
+const pausedOrdersRetriever = createSelector(
+  retrievePausedOrders,
+  (pausedOrders) => ({ pausedOrders })
+);
+
+const finishedOrdersRetriever = createSelector(
+  retrieveFinishedOrders,
+  (finishedOrders) => ({ finishedOrders })
+);
+
+const processOrdersRetriever = createSelector(
+  retrieveProcessOrders,
+  (processOrders) => ({ processOrders })
+);
+
+interface PausedOrderProps {
+  setValue: (input: string) => void;
+}
+
+interface ProcessOrderProps {
+  setValue: (input: string) => void;
+}
 
 export default function MyPage() {
-  const location = useLocation();
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } =
+    actionDispatch(useDispatch());
+  const { orderBuilder, setOrderBuilder, authMember, setAuthMember } = useGlobals();
   const navigate = useNavigate();
-  const { authMember } = useGlobals();
+  const [value, setValue] = useState();
 
-  // Parse query parameters from the URL
+  const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+    page: 1,
+    limit: 4,
+    orderStatus: OrderStatus.PAUSE,
+  });
+
+  const { finishedOrders } = useSelector(finishedOrdersRetriever);
+  const { pausedOrders } = useSelector(pausedOrdersRetriever);
+  const { processOrders } = useSelector(processOrdersRetriever);
+
+  // HANDLERS
+
+  const processOrderHandler = async (e: T) => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+      // PAYMENT PROCESS
+
+      const orderId = e.target.value;
+      const input: OrderUpdateInput = {
+        orderId: orderId,
+        orderStatus: OrderStatus.PROCESS,
+      };
+
+      const confirmation = window.confirm(
+        "Do you wart to proceed with payment?"
+      );
+      if (confirmation) {
+        const order = new OrderService();
+        await order.updateOrder(input);
+        setOrderBuilder(new Date());
+      }
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  };
+
+  const finishedOrderHandler = async (e: T) => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+      // PAYMENT PROCESS
+
+      const orderId = e.target.value;
+      const input: OrderUpdateInput = {
+        orderId: orderId,
+        orderStatus: OrderStatus.FINISH,
+      };
+
+      const confirmation = window.confirm("Have you received your order?");
+      if (confirmation) {
+        const order = new OrderService();
+        await order.updateOrder(input);
+        setOrderBuilder(new Date());
+      }
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  };
+
+  const handlerLogoutRequest = async () => {
+    try {
+      const member = new MemberService();
+      await member.logout();
+      await sweetTopSuccessAlert("success", 700);
+      setAuthMember(null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(Messages.error1).then();
+    }
+  };
+
+  useEffect(() => {
+    const order = new OrderService();
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PAUSE })
+      .then((data) => setPausedOrders(data))
+      .catch((err) => console.log("Error fetching paused orders:", err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PROCESS })
+      .then((data) => setProcessOrders(data))
+      .catch((err) => console.log("Error fetching process orders:", err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
+      .then((data) => setFinishedOrders(data))
+      .catch((err) => console.log("Error fetching finished orders:", err));
+  }, [orderInquiry, orderBuilder]);
+
+  // const handleChange = (e: React.SyntheticEvent, newValue: string) => {
+  //   setValue(newValue);
+  // };
+
+  if (!authMember) navigate("/");
+
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialSection = queryParams.get("section") || "Orders";
 
-  // State to track the selected menu option
   const [activeSection, setActiveSection] = useState<string>(
     initialSection as string
   );
-
-  const [formData, setFormData] = useState({
-    // name: memberNick, 
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "+1234567890",
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     navigate(`/mypage?section=${activeSection}`);
@@ -42,122 +183,232 @@ export default function MyPage() {
     // Call an API to save the updated profile details
   };
 
-  // Function to render content dynamically
-  const renderContent = () => {
-    switch (activeSection) {
-      case "Orders":
-        return (
-          <div>
-            <h2>Order No: 000546456</h2>
+  
+
+  const deleteOrderHandler = async (e: T) => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+      const orderId = e.target.value;
+      const input: OrderUpdateInput = {
+        orderId: orderId,
+        orderStatus: OrderStatus.DELETE,
+      };
+
+      const confirmation = window.confirm("Do you wart to delete the order?");
+      if (confirmation) {
+        const order = new OrderService();
+        await order.updateOrder(input);
+        setOrderBuilder(new Date());
+      }
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  };
+
+  const renderPausedOrders = (orders: Order[]) => {
+    return (
+      <div>
+        <h2>Orders</h2>
+        {orders.map((order) => (
+          <div key={order._id} className="order-card">
+            <h3>Order ID: {order._id}</h3>
+            <p>Status: {order.orderStatus}</p>
+            <p>Total: ${order.orderTotal}</p>
+            <p>Delivery: ${order.orderDelivery}</p>
             <table className="order-table">
               <thead>
                 <tr>
                   <th>Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
-                  <th>Total Price</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="product-cell">
-                    <img
-                      src="/img/cf.jpg" // Replace with actual image URL
-                      alt="Essential Oil"
-                      className="product-image"
-                    />
-                    <span>Essential Oil</span>
-                  </td>
-                  <td>$20.00</td>
-                  <td>1</td>
-                  <td>$20.00</td>
-                </tr>
-                <tr>
-                  <td className="product-cell">
-                    <img
-                      src="/img/sauvages.jpg" // Replace with actual image URL
-                      alt="Essential Oil"
-                      className="product-image"
-                    />
-                    <span> Dior Sauvage</span>
-                  </td>
-                  <td>$20.00</td>
-                  <td>1</td>
-                  <td>$20.00</td>
-                </tr>
-                <tr>
-                  <td className="product-cell">
-                    <img
-                      src="/img/chanel.jpg" // Replace with actual image URL
-                      alt="Essential Oil"
-                      className="product-image"
-                    />
-                    <span>Essential Oil</span>
-                  </td>
-                  <td>$20.00</td>
-                  <td>1</td>
-                  <td>$20.00</td>
-                </tr>
+                {order.orderItems.map((item) => {
+                  const product = order.productData.find(
+                    (p) => p._id === item.productId
+                  );
+                  return (
+                    <tr key={item._id}>
+                      <td className="product-cell">
+                        <img
+                          src={`${serverApi}/${product?.productImages[0]}`}
+                          alt={product?.productName}
+                          className="product-image"
+                        />
+                        <span>{product?.productName}</span>
+                      </td>
+                      <td>${item.itemPrice}</td>
+                      <td>{item.itemQuantity}</td>
+                      <td>${item.itemPrice * item.itemQuantity}</td>
+                    </tr>
+                  );
+                })}
+
+                <Box
+                  className="order-btn"
+                  sx={{
+                    gap: "15px",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    value={order._id}
+                    onClick={deleteOrderHandler}
+                    className="cancel"
+                    sx={{
+                      background: "orange",
+                      "&:hover": { background: "red" },
+                      marginTop: "20px",
+                    }}
+                  >
+                    CANCEL
+                  </Button>
+                  <Button
+                    value={order._id}
+                    className="payment"
+                    onClick={processOrderHandler}
+                    sx={{
+                      background: "orange",
+                      "&:hover": { background: "green" },
+                      marginTop: "20px",
+                    }}
+                  >
+                    PAYMENT
+                  </Button>
+                </Box>
               </tbody>
             </table>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
-            <div className="details-footer">
-              <div className="address-section">
-                <h4>Delivery Address</h4>
-                <p>100/1 A South Pirerbag</p>
-                <p>Mirpur Dhaka-1216</p>
-                <p>+8801627808712</p>
-              </div>
-              <div className="address-section">
-                <h4>Billing Address</h4>
-                <p>100/1 A South Pirerbag</p>
-                <p>Mirpur Dhaka-1216</p>
-                <p>+8801627808712</p>
-              </div>
-              <div className="address-section">
-                <h4>Payment Method</h4>
-                <p>Mastercard</p>
-                <p>4405 **** 0101</p>
-                <p>Credit Card</p>
-              </div>
-              {/* Total Summary */}
-              <div className="order-total-summary">
-                <div className="summary-item">
-                  <strong>SubTotal:</strong>
-                  <span>$60.00</span>
-                </div>
-                <div className="summary-item">
-                  <strong>Cargo:</strong>
-                  <span>$0.00</span>
-                </div>
-                <div className="summary-item">
-                  <strong>Discount:</strong>
-                  <span>$10.00</span>
-                </div>
-                <div className="summary-total">
-                  <span>Total:</span>
-                  <span>$61.50</span>
-                </div>
-              </div>
-            </div>
+  const renderProcessOrders = (orders: Order[]) => {
+    return (
+      <div>
+        <h2>Orders</h2>
+        {orders.map((order) => (
+          <div key={order._id} className="order-card">
+            <h3>Order ID: {order._id}</h3>
+            <p>Status: {order.orderStatus}</p>
+            <p>Total: ${order.orderTotal}</p>
+            <p>Delivery: ${order.orderDelivery}</p>
+            <table className="order-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.orderItems.map((item) => {
+                  const product = order.productData.find(
+                    (p) => p._id === item.productId
+                  );
+                  return (
+                    <tr key={item._id}>
+                      <td className="product-cell">
+                        <img
+                          src={`${serverApi}/${product?.productImages[0]}`}
+                          alt={product?.productName}
+                          className="product-image"
+                        />
+                        <span>{product?.productName}</span>
+                      </td>
+                      <td>${item.itemPrice}</td>
+                      <td>{item.itemQuantity}</td>
+                      <td>${item.itemPrice * item.itemQuantity}</td>
+                    </tr>
+                  );
+                })}
+                <Box className="order-btn">
+                  <p className="data">{moment().format("YY-MM-DD HH:mm")}</p>
+                  <Button
+                    value={order._id}
+                    variant="contained"
+                    className="payment"
+                    onClick={finishedOrderHandler}
+                    sx={{
+                      background: "orange",
+                      "&:hover": { background: "red" },
+                      marginTop: "20px",
+                    }}
+                  >
+                    Verify to Fulfil
+                  </Button>
+                </Box>
+              </tbody>
+            </table>
           </div>
-        );
-      case "Tracking":
-        return (
-          <div>
-            <h2>Tracking Information</h2>
-            <p>
-              Your package is currently in transit and will be delivered soon.
-            </p>
+        ))}
+      </div>
+    );
+  };
+
+  const renderFinishOrders = (orders: Order[]) => {
+    return (
+      <div>
+        <h2>Orders</h2>
+        {orders.map((order) => (
+          <div key={order._id} className="order-card">
+            <h3>Order ID: {order._id}</h3>
+            <p>Status: {order.orderStatus}</p>
+            <p>Total: ${order.orderTotal}</p>
+            <p>Delivery: ${order.orderDelivery}</p>
+            <table className="order-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.orderItems.map((item) => {
+                  const product = order.productData.find(
+                    (p) => p._id === item.productId
+                  );
+                  return (
+                    <tr key={item._id}>
+                      <td className="product-cell">
+                        <img
+                          src={`${serverApi}/${product?.productImages[0]}`}
+                          alt={product?.productName}
+                          className="product-image"
+                        />
+                        <span>{product?.productName}</span>
+                      </td>
+                      <td>${item.itemPrice}</td>
+                      <td>{item.itemQuantity}</td>
+                      <td>${item.itemPrice * item.itemQuantity}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        );
-      case "Pending":
-        return (
-          <div>
-            <h2>Pending Orders</h2>
-            <p>You have no pending orders at the moment.</p>
-          </div>
-        );
+        ))}
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case "PausedOrders":
+        return renderPausedOrders(pausedOrders);
+      case "ProcessOrders":
+        return renderProcessOrders(processOrders);
+      case "FinishedOrders":
+        return renderFinishOrders(finishedOrders);
       case "Profile":
         return (
           <div className="profile-section">
@@ -165,15 +416,15 @@ export default function MyPage() {
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div>
-                  <label>{formData.firstName}</label>
+                  <label>Member Name</label>
                   <input
                     type="text"
                     name="firstName"
-                    value={formData.firstName}
+                    value={authMember?.memberNick}
                     onChange={handleInputChange}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label>Last Name</label>
                   <input
                     type="text"
@@ -181,24 +432,24 @@ export default function MyPage() {
                     value={formData.lastName}
                     onChange={handleInputChange}
                   />
-                </div>
+                </div> */}
               </div>
               <div className="form-row">
-                <div>
+                {/* <div>
                   <label>Email</label>
                   <input
                     type="email"
                     name="email"
-                    value={formData.email}
+                    value={authMember.}
                     onChange={handleInputChange}
                   />
-                </div>
+                </div> */}
                 <div>
                   <label>Phone</label>
                   <input
                     type="text"
                     name="phone"
-                    value={formData.phone}
+                    value={authMember?.memberPhone}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -215,14 +466,19 @@ export default function MyPage() {
   return (
     <Container>
       <div className="order-page">
-        {/* Sidebar Section */}
         <div className="sidebar">
           <div className="menu-section">
             <h3>Orders</h3>
             <ul>
-              <li onClick={() => setActiveSection("Orders")}>Orders</li>
-              <li onClick={() => setActiveSection("Tracking")}>Tracking</li>
-              <li onClick={() => setActiveSection("Pending")}>Pending</li>
+              <li onClick={() => setActiveSection("PausedOrders")}>
+                Paused Orders
+              </li>
+              <li onClick={() => setActiveSection("ProcessOrders")}>
+                Process Orders
+              </li>
+              <li onClick={() => setActiveSection("FinishedOrders")}>
+                Finished Orders
+              </li>
             </ul>
           </div>
           <div className="menu-section">
@@ -231,12 +487,10 @@ export default function MyPage() {
               <li onClick={() => setActiveSection("Profile")}>Profile</li>
               <li onClick={() => setActiveSection("Address")}>Address</li>
               <li onClick={() => setActiveSection("Payment")}>Payment</li>
-              <li onClick={() => setActiveSection("LogOut")}>Log Out</li>
+              <li onClick={() => handlerLogoutRequest()}>Log Out</li>
             </ul>
           </div>
         </div>
-
-        {/* Dynamic Content Section */}
         <div className="order-details">{renderContent()}</div>
       </div>
     </Container>

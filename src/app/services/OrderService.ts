@@ -36,7 +36,7 @@ class OrderService {
 
     public async getMyOrders(input: OrderInquiry): Promise<Order[]> {
         try {
-            // axios.defaults.withCredentials = true;
+            axios.defaults.withCredentials = true;
             const url = `${this.path}/order/all`;
             const query = `?page=${input.page}&limit=${input.limit}&orderStatus=${input.orderStatus}`;
 

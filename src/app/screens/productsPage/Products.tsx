@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Checkbox,
   Container,
   FormControlLabel,
@@ -13,11 +14,21 @@ import ProductService from "../../services/ProductService";
 import { Product, ProductInquiry } from "../../../libs/types/product";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { CartItem } from "../../../libs/types/search";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { retrieveProducts } from "./selector";
 import { setProducts } from "./slice";
-import "../../../css/product.css";
 import { serverApi } from "../../../libs/config";
+import "../../../css/product.css";
+
+const countProductsByCollection = (
+  products: Product[]
+): Record<ProductCollection, number> => {
+  return products.reduce((counts, product) => {
+    const collection = product.productCollection;
+    counts[collection] = (counts[collection] || 0) + 1;
+    return counts;
+  }, {} as Record<ProductCollection, number>);
+};
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Product[]) => dispatch(setProducts(data)),
@@ -32,6 +43,7 @@ interface ProductsProps {
 }
 
 export default function ProductsPage(props: ProductsProps) {
+  const { productId } = useParams();
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(ProductsRetriever);
@@ -90,19 +102,79 @@ export default function ProductsPage(props: ProductsProps) {
   };
 
   const chooseProductHandler = (id: string) => {
-    navigate(`/products/${id}`);
+    navigate(`/product/${id}`);
   };
+
+  const [productCounts, setProductCounts] = useState<
+    Record<ProductCollection, number>
+  >({} as Record<ProductCollection, number>);
+
+  useEffect(() => {
+    // Fetch products and update counts
+    const product = new ProductService();
+
+    product
+      .getProducts(productSearch)
+      .then((data) => {
+        setProducts(data); // Update the products in Redux
+        const counts = countProductsByCollection(data); // Calculate counts
+        setProductCounts(counts); // Update the state
+      })
+      .catch((err) => console.error(err));
+  }, [productSearch]);
+
+  const [selectedCapacities, setSelectedCapacities] = useState<string[]>([]);
+
+  const handleCapacityChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setSelectedCapacities([...selectedCapacities, value]);
+    } else {
+      setSelectedCapacities(
+        selectedCapacities.filter((capacity) => capacity !== value)
+      );
+    }
+  };
+
+  useEffect(() => {
+    const product = new ProductService();
+
+    product
+      .getProducts({
+        ...productSearch,
+        capacities: selectedCapacities,
+      })
+      .then((data) => {
+        setProducts(data); // Update the products in Redux
+        const counts = countProductsByCollection(data); // Calculate counts
+        setProductCounts(counts); // Update the state
+      })
+      .catch((err) => console.error(err));
+  }, [productSearch, selectedCapacities]);
+
+  if (productId) return null;
 
   return (
     <div className="products">
       <Container style={{ height: "auto" }}>
         <Stack className="product-frame">
           <Stack className="avatar-big-box">
-            <Stack className="product-title" sx={{ pr: "132" }}>
-              <Box>Products</Box>
+            <Stack>
+              <Box
+                sx={{
+                  color: "#394149",
+                  fontFamily: "Poppins",
+                  fontSize: 30,
+                  fontStyle: "normal",
+                  fontWeight: 600,
+                  marginTop: 10,
+                }}
+              >
+                Products
+              </Box>
               <Stack className="home-logo">
-                <img src="/icons/home.svg" />
-                <span className="logo-text">Collection</span>
+                {/* <img src="/icons/home.svg" /> */}
+                {/* <span className="logo-text">Collection</span> */}
               </Stack>
             </Stack>
           </Stack>
@@ -136,168 +208,219 @@ export default function ProductsPage(props: ProductsProps) {
                 <Stack className="collection-list">
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.PERFUME)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.PERFUME)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.PERFUME
+                          ProductCollection.PERFUME
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      Perfume
+                      {ProductCollection.PERFUME}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.PERFUME
+                          ProductCollection.PERFUME
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      (09)
+                      ({productCounts[ProductCollection.PERFUME] || 0})
                     </span>
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.MAKEUP)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.MAKEUP)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.MAKEUP ? "#C28566" : "#394149"
+                          ProductCollection.MAKEUP
+                            ? "#C28566"
+                            : "#394149"
                         }`,
                       }}
                     >
-                      Makeup
+                      {ProductCollection.MAKEUP}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.MAKEUP ? "#C28566" : "#394149"
+                          ProductCollection.MAKEUP
+                            ? "#C28566"
+                            : "#394149"
                         }`,
                       }}
                     >
-                      (09)
+                      ({productCounts[ProductCollection.MAKEUP] || 0})
                     </span>
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.FASHION)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.FASHION)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.FASHION
+                          ProductCollection.FASHION
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      Fashion
+                      {ProductCollection.FASHION}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.FASHION
+                          ProductCollection.FASHION
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      (09)
+                      ({productCounts[ProductCollection.FASHION] || 0})
                     </span>
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.CREAM)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.CREAM)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.CREAM ? "#C28566" : "#394149"
+                          ProductCollection.CREAM
+                            ? "#C28566"
+                            : "#394149"
                         }`,
                       }}
                     >
-                      Cream
+                      {ProductCollection.CREAM}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.CREAM ? "#C28566" : "#394149"
+                          ProductCollection.CREAM
+                            ? "#C28566"
+                            : "#394149"
                         }`,
                       }}
                     >
-                      (09)
+                      ({productCounts[ProductCollection.CREAM] || 0})
                     </span>
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.ESSENTIAL_OIL)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.ESSENTIAL_OIL)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.ESSENTIAL_OIL
+                          ProductCollection.ESSENTIAL_OIL
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      Essential Oil
+                      {ProductCollection.ESSENTIAL_OIL}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.ESSENTIAL_OIL
+                          ProductCollection.ESSENTIAL_OIL
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      (8)
+                      ({productCounts[ProductCollection.ESSENTIAL_OIL] || 0})
                     </span>
                   </Stack>
                   <Stack
                     className="category-options"
-                    onClick={() => searchCollectionHandler(ProductCollection.BODY_LOTION)}
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.BODY_LOTION)
+                    }
                   >
                     <strong
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.BODY_LOTION
+                          ProductCollection.BODY_LOTION
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      Body Lotion
+                      {ProductCollection.BODY_LOTION}
                     </strong>
                     <span
                       style={{
                         color: `${
                           productSearch.productCollection ===
-                    ProductCollection.BODY_LOTION
+                          ProductCollection.BODY_LOTION
                             ? "#C28566"
                             : "#394149"
                         }`,
                       }}
                     >
-                      (11)
+                      ({productCounts[ProductCollection.BODY_LOTION] || 0})
+                    </span>
+                  </Stack>
+                  <Stack
+                    className="category-options"
+                    onClick={() =>
+                      searchCollectionHandler(ProductCollection.OTHERS)
+                    }
+                  >
+                    <strong
+                      style={{
+                        color: `${
+                          productSearch.productCollection ===
+                          ProductCollection.OTHERS
+                            ? "#C28566"
+                            : "#394149"
+                        }`,
+                      }}
+                    >
+                      {ProductCollection.OTHERS}
+                    </strong>
+                    <span
+                      style={{
+                        color: `${
+                          productSearch.productCollection ===
+                          ProductCollection.OTHERS
+                            ? "#C28566"
+                            : "#394149"
+                        }`,
+                      }}
+                    >
+                      ({productCounts[ProductCollection.OTHERS] || 0})
                     </span>
                   </Stack>
                 </Stack>
@@ -305,61 +428,102 @@ export default function ProductsPage(props: ProductsProps) {
 
               {/* Capacity Section */}
               <div className="sidebar-section">
-                <h3 className="sidebar-title">Capacity</h3>
+                <h3 className="sidebar-title">Sort By</h3>
                 <div className="capacity-options">
-                  {["20ml", "40ml", "50ml", "100ml", "250ml", "500ml"].map(
-                    (size, index) => (
-                      <FormControlLabel
-                        key={index}
-                        control={<Checkbox />}
-                        label={`${size} `}
-                      />
-                    )
-                  )}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color:
+                        productSearch.order === "createdAt" ? "#fff" : "black",
+                      width: "75px",
+                      "&:hover": { background: "#C28566", opacity: 0.8 }
+                    }}
+                    className="order"
+                    onClick={() => searchOrderHandler("createdAt")}
+                  >
+                    New
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color:
+                        productSearch.order === "productPrice"
+                          ? "#fff"
+                          : "black",
+                          "&:hover": { background: "#C28566", opacity: 0.8 }
+                    }}
+                    className="order"
+                    onClick={() => searchOrderHandler("productPrice")}
+                  >
+                    Price
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color:
+                        productSearch.order === "productViews"
+                          ? "#fff"
+                          : "black",
+                          "&:hover": { background: "#C28566", opacity: 0.8 }
+                    }}
+                    className="order"
+                    onClick={() => searchOrderHandler("productViews")}
+                  >
+                    Views
+                  </Button>
                 </div>
               </div>
             </Stack>
-            <Stack className="f-card-grid">
             {products.length !== 0 ? (
-                products.map((product) => {
+              <Stack className="f-card-grid">
+                {products.map((product) => {
                   const imagePath = `${serverApi}/${product.productImages[0]}`;
                   // const sizeVolume =
                   //   product.productCollection === ProductCollection.PERFUME
-                      
+
                   //      product.productSize + "size";
-                return (
-                  <Stack key={product._id} className="f-card">
-                    <Stack className="f-card-img">
-                      <img
-                        src={imagePath}
-                        alt={product.productName}
-                        className="f-image"
-                      />
-                    </Stack>
-                    <Stack className="f-card-info">
-                      <Stack className="f-info-box">
-                        <Stack className="f-category-text">Perfume</Stack>
-                        <Stack>
-                          <img
-                            src={"/icons/review.svg"}
-                            alt="Review Stars"
-                            style={{ width: "128px", height: "20px" }}
-                          />
+                  return (
+                    <Stack key={product._id} className="f-card">
+                      <Stack className="f-card-img">
+                        <img
+                          src={imagePath}
+                          alt={product.productName}
+                          className="f-image"
+                          onClick={() => chooseProductHandler(product._id)}
+                        />
+                      </Stack>
+                      <Stack className="f-card-info">
+                        <Stack className="f-info-box">
+                          <Stack className="f-category-text">
+                            {product.productCollection}
+                          </Stack>
+                          <Stack>
+                            <img
+                              src={"/icons/review.svg"}
+                              alt="Review Stars"
+                              style={{ width: "128px", height: "20px" }}
+                            />
+                          </Stack>
+                        </Stack>
+                        <Stack className="f-info-name">
+                          {product.productName}
+                        </Stack>
+                        <Stack className="f-info-price">
+                          <span className="f-price">
+                            ${product.productPrice}
+                          </span>
+                          <span className="f-discount">-30%</span>
                         </Stack>
                       </Stack>
-                      <Stack className="f-info-name">{product.productName}</Stack>
-                      <Stack className="f-info-price">
-                        <span className="f-price">${product.productPrice}</span>
-                        <span className="f-discount">-30%</span>
-                      </Stack>
                     </Stack>
-                  </Stack>
-                );
-              })
+                  );
+                })}
+              </Stack>
             ) : (
-              <Box className="no-data">Popular product are not avaiable!</Box>
+              <Box className="no-data" sx={{ marginRight: "80px" }}>
+                Popular product are not avaiable!
+              </Box>
             )}
-            </Stack>
           </Stack>
 
           <Stack className="pagination-section">

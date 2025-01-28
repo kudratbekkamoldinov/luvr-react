@@ -1,78 +1,73 @@
-import { Routes, Route, useLocation, Navigate} from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { HomeNavbar } from "./components/headers/HomeNavbar";
 import { TopNavbar } from "./components/headers/TopNavbar";
 import Footer from "./components/footer";
-import "../css/app.css";
-import "../css/navbar.css";
-import "../css/footer.css";
-import "../css/home.css"
-import "../css/common.css"
 import MyPage from "./screens/myPage";
-import AuthPage from "./components/auth";
-import { useState } from "react";
-import { Messages } from "../libs/config";
-import { sweetTopSuccessAlert, sweetErrorHandling } from "../libs/sweetAlert";
 import { useGlobals } from "./hooks/useGlobals";
-
-import MemberService from "./services/MemberService";
 import ProductsPage from "./screens/productsPage/Products";
 import { AboutPage } from "./screens/aboutPage";
 import useBasket from "./hooks/useBasket";
 import HomePage from "./screens/homePage";
-
+import ChosenProduct from "./screens/productsPage/ChosenProduct";
+import "../css/app.css";
+import "../css/navbar.css";
+import "../css/footer.css";
+import "../css/home.css";
+import "../css/common.css";
+import AuthenticationModal from "./components/auth";
+import { useState } from "react";
 
 export default function App() {
-  const location = useLocation(); // Detect current route
-  const authMember = true;
-  console.log("location", location);
-
-  const {onAdd} = useBasket();
-
-  const { setAuthMember } = useGlobals();
-
-  // const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
+  const location = useLocation();
+  const {authMember} = useGlobals();
+  const {onAdd, onRemove, onDelete, onDeleteAll, cartItems} = useBasket();
+  
   const [signupOpen, setSignupOpen] = useState<boolean>(false);
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
-  const [anchoEl, setAnchoEl] = useState<HTMLElement | null>(null);
-
-  /* Handlers */
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleSignupClose = () => setSignupOpen(false);
   const handleLoginClose = () => setLoginOpen(false);
-  const handlerLogoutClick = (e: React.MouseEvent<HTMLElement>) =>
-    setAnchoEl(e.currentTarget);
-  const handlerCloseLogout = () => setAnchoEl(null);
 
-  const handlerLogoutRequest = async () => {
-    try {
-      const member = new MemberService();
-      await member.logout();
-      await sweetTopSuccessAlert("success", 700);
-      setAuthMember(null);
-    } catch (err) {
-      console.log(err);
-      sweetErrorHandling(Messages.error1).then();
-    }
-  };
-
+  
   return (
     <>
-      <TopNavbar/>
+    <TopNavbar 
+      cartItems={cartItems} 
+      onAdd={onAdd} 
+      onRemove={onRemove} 
+      onDelete={onDelete} 
+      onDeleteAll={onDeleteAll} 
+      setSignupOpen={setSignupOpen} 
+      setLoginOpen={setLoginOpen} 
+      anchoEl={anchorEl} 
+    />
       {location.pathname === "/" && <HomeNavbar />}
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage/>} />
         <Route path="/products/*" element={<ProductsPage onAdd={onAdd} />} />
         <Route
-          path="/mypage"
-          element={authMember ? <MyPage /> : <Navigate to="/login" replace/>}
+          path="/product/:productId"
+          element={<ChosenProduct onAdd={onAdd} />}
         />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route
+          path="/mypage"
+          element={authMember ? <MyPage /> : null}
+        />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
 
       <Footer />
+      <AuthenticationModal
+        signupOpen={signupOpen}
+        loginOpen={loginOpen}
+        handleSignupClose={handleSignupClose}
+        handleLoginClose={handleLoginClose}
+      />
+
+
     </>
   );
 }

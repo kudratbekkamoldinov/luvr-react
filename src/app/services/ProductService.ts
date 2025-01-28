@@ -20,7 +20,6 @@ class ProductService {
 
       const result = await axios.get(url);
       console.log("getProducts:", result.data);
-      // 'http://localhost:2000/product/all?order=createdAt&page=1&limit=8&productCollection=Perfume'
 
       return result.data;
     } catch (err) {

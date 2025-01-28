@@ -22,4 +22,5 @@ export enum ProductCollection {
     CREAM = "Cream",
     ESSENTIAL_OIL = "Essential Oil",
     BODY_LOTION = "Body Lotion",
+    OTHERS = "Others"
 }

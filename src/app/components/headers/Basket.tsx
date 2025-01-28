@@ -23,7 +23,7 @@ interface BasketProps {
 
 export default function Basket(props: BasketProps) {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
-  const {authMember, setOrderBuilder} = useGlobals();
+  const { authMember, setOrderBuilder } = useGlobals();
   const history = useNavigate();
   const itemsPrice: number = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,
@@ -57,7 +57,7 @@ export default function Basket(props: BasketProps) {
       // Refresh  via context
       setOrderBuilder(new Date());
 
-      history("/orders");
+      history("/mypage?section=PausedOrders");
     } catch (err) {
       console.log(err);
       sweetErrorHandling(err).then();
@@ -75,7 +75,7 @@ export default function Basket(props: BasketProps) {
         onClick={handleClick}
       >
         <Badge badgeContent={cartItems.length} color="secondary">
-          <img src={"/icons/shopping-cart.svg"} />
+          <img src={"/icons/shopping-bag.svg"} style={{ fontSize: 20 }} />
         </Badge>
       </IconButton>
       <Menu
@@ -83,7 +83,7 @@ export default function Basket(props: BasketProps) {
         id="account-menu"
         open={open}
         onClose={handleClose}
-        // onClick={handleClose}
+        onClick={handleClose}
         PaperProps={{
           elevation: 0,
           sx: {
