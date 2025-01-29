@@ -2,13 +2,20 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 import "../../../css/navbar.css";
+import { useGlobals } from "../../hooks/useGlobals";
 
-export function HomeNavbar() {
-    const navigate = useNavigate();
+interface HomeNavbarProps {
+  setSignupOpen: (isOpen: boolean) => void;
+}
 
-    const homeClick = () => {
-        navigate('/products');
-    }
+export function HomeNavbar(props: HomeNavbarProps) {
+  const navigate = useNavigate();
+  const { setSignupOpen } = props;
+  const { authMember } = useGlobals();
+
+  const homeClick = () => {
+    navigate("/products");
+  };
   return (
     <Box className="hero">
       <Container>
@@ -27,9 +34,12 @@ export function HomeNavbar() {
               beauty, people often think of personal accessories that make a
               difference to help the wearer stand out.
             </Box>
-            <Box className="hero-button" onClick={homeClick} >
-                <Box className="explore">Explore</Box>
-            </Box>
+            {!authMember ? (
+              <Box className="hero-button" onClick={() => setSignupOpen(true)}>
+                <Box className="explore">SignUp</Box>
+              </Box>
+            ) : null}
+            
           </Box>
         </Stack>
       </Container>

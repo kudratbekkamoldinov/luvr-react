@@ -9,7 +9,6 @@ import { AboutPage } from "./screens/aboutPage";
 import useBasket from "./hooks/useBasket";
 import HomePage from "./screens/homePage";
 import ChosenProduct from "./screens/productsPage/ChosenProduct";
-import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/home.css";
@@ -42,7 +41,7 @@ export default function App() {
       setLoginOpen={setLoginOpen} 
       anchoEl={anchorEl} 
     />
-      {location.pathname === "/" && <HomeNavbar />}
+      {location.pathname === "/" && <HomeNavbar setSignupOpen={setSignupOpen} />}
 
       <Routes>
         <Route path="/" element={<HomePage/>} />

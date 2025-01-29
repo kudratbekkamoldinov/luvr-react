@@ -150,11 +150,11 @@ export default function Basket(props: BasketProps) {
                       <div className="col-2">
                         <button
                           onClick={() => onRemove(item)}
-                          className="remove"
+                          style={{background: "#c28566"}}
                         >
                           -
                         </button>{" "}
-                        <button onClick={() => onAdd(item)} className="add">
+                        <button onClick={() => onAdd(item)} style={{background: "#c28566"}}>
                           +
                         </button>
                       </div>

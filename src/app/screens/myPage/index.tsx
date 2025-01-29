@@ -54,6 +54,34 @@ interface ProcessOrderProps {
   setValue: (input: string) => void;
 }
 
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    apartment: '',
+    city: '',
+    country: 'Bangladesh',
+    state: 'Dhaka',
+    zipCode: ''
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    // Handle form submission
+    console.log(formData);
+  };
+}
+
 export default function MyPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
@@ -211,8 +239,8 @@ export default function MyPage() {
       <div>
         <h2>Orders</h2>
         {orders.map((order) => (
-          <div key={order._id} className="order-card">
-            <h3>Order ID: {order._id}</h3>
+          <div key={order._id} >
+            <p>Order ID: {order._id}</p>
             <p>Status: {order.orderStatus}</p>
             <p>Total: ${order.orderTotal}</p>
             <p>Delivery: ${order.orderDelivery}</p>
@@ -231,7 +259,7 @@ export default function MyPage() {
                     (p) => p._id === item.productId
                   );
                   return (
-                    <tr key={item._id}>
+                    <tr key={item._id} >
                       <td className="product-cell">
                         <img
                           src={`${serverApi}/${product?.productImages[0]}`}
@@ -254,6 +282,7 @@ export default function MyPage() {
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
+                    marginBottom: "40px"
                   }}
                 >
                   <Button
@@ -338,7 +367,7 @@ export default function MyPage() {
                     onClick={finishedOrderHandler}
                     sx={{
                       background: "orange",
-                      "&:hover": { background: "red" },
+                      "&:hover": { background: "green" },
                       marginTop: "20px",
                     }}
                   >
@@ -458,6 +487,96 @@ export default function MyPage() {
             </form>
           </div>
         );
+
+        case "Address":
+          return (
+            <div className="profile-section">
+              <h2>Address Details</h2>
+              <form >
+                <div className="form-row">
+                  <div>
+                    <label>City</label>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value="Daejeon"
+                    />
+                  </div>
+                  <div>
+                    <label>State</label>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value="Daejeon"
+
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div>
+                    <label>Country</label>
+                    <input 
+                      value="South Korea"
+                    />
+                  </div>
+                  <div>
+                    <label>ZipCode</label>
+                    <input
+                      type="text"
+                      placeholder="ZipCode"
+                      value="3077704"
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <button type="submit">Save Changes</button>
+              </form>
+            </div>
+          );
+          
+
+          case "Payment":
+            return (
+              <div className="profile-section">
+                <h2>Payment Details</h2>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-row">
+                    <div>
+                      <label>Card Name</label>
+                      <input
+                        type="text"
+                        value="JOSEPH"
+
+                      />
+                    </div>
+                    <div>
+                      <label>Card Number</label>
+                      <input
+                        type="text"
+                        value="12345678890"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div>
+                      <label>Month/Year</label>
+                      <input
+                        value="07/29"
+                      />
+                    </div>
+                    <div>
+                      <label>CCV</label>
+                      <input
+                      value="000"
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                  <button type="submit">Save Changes</button>
+                </form>
+              </div>
+            );
+      
       default:
         return <p>Please select an option from the menu.</p>;
     }

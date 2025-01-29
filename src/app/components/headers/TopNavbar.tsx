@@ -31,7 +31,6 @@ export function TopNavbar(props: TopNavbarProps) {
 
   const { authMember } = useGlobals();
 
-
   return (
     <div className="top-navbar">
       <Container className="top-navbar-container">
@@ -57,15 +56,20 @@ export function TopNavbar(props: TopNavbarProps) {
             </NavLink>
           ) : null}
           {!authMember ? (
-              <Button
-                variant="contained"
-                className="login-button"
-                onClick={() => setLoginOpen(true)}
-                style={{textTransform: "capitalize", fontSize: 18, padding: "0px"}}
-              >
-                Login
-              </Button>
-          ) : null}
+            <Button
+              variant="contained"
+              className="login-button"
+              onClick={() => setLoginOpen(true)}
+              style={{
+                textTransform: "capitalize",
+                fontSize: 18,
+                padding: "0px",
+              }}
+            >
+              Login
+            </Button>
+          ) : (null)
+          }
           <NavLink to="/about" className="nav-item">
             About
           </NavLink>

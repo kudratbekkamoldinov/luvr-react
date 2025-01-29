@@ -520,7 +520,7 @@ export default function ProductsPage(props: ProductsProps) {
                 })}
               </Stack>
             ) : (
-              <Box className="no-data" sx={{ marginRight: "80px" }}>
+              <Box className="no-data" sx={{ marginRight: "160px" }}>
                 Popular product are not avaiable!
               </Box>
             )}

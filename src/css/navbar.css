@@ -6,7 +6,7 @@
   background-color: #fff6f2;
   padding: 4rem 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -49,6 +49,7 @@
   margin-bottom: 55px;
   margin-top: 80px;
   background: var(--White, #fff);
+  flex-direction: row;
 }
 
 .hero-subtitle {
@@ -101,8 +102,8 @@
 .hero-button {
   margin-left: 70px;
   margin-top: 70px;
-  width: 159px;
-  height: 63px;
+  width: 199px;
+  height: 83px;
   background: var(--Accent-Color, #c28566);
   display: flex;
   flex-direction: row;
@@ -119,11 +120,19 @@
     line-height: 120%; /* 26.4px */
     letter-spacing: 3.74px;
     text-transform: capitalize;
-    text-align:center;
+    text-align: center;
+    align-items: center;
   
 }
 
 .hero-button:hover {
   background-color: #f9d82f;
   
+}
+
+.buttons {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+
 }
