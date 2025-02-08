@@ -18,7 +18,7 @@ export default function Footer() {
     <Footers>
       <Container>
         <Stack flexDirection={"row"} sx={{ mt: "94px" }}>
-          <Stack flexDirection={"column"} style={{ width: "340px" }}>
+          <Stack flexDirection={"column"} style={{ width: "340px", gap: "20px" }}>
             <Box>
               <img className="logo" src="/icons/illustration.svg" alt="Logo" />
               <img width={"100px"}  src={"/icons/Luvr.svg"} />
